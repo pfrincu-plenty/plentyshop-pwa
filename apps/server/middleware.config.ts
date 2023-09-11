@@ -22,9 +22,6 @@ const config = {
               beforeCreate: ({ configuration }: any) => configuration,
               afterCreate: ({ configuration }: any) => configuration,
               beforeCall: ({ configuration, callName, args }: any) => {
-
-                console.log('cookies', req.cookie)
-                console.log(configuration, args);
                 return args
               },
               afterCall: ({ configuration, callName, args, response }: any) => response
