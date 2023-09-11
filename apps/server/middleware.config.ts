@@ -1,6 +1,8 @@
 import dotenv from 'dotenv';
 dotenv.config();
 
+console.log('Middleware api endpoint', process.env.API_ENDPOINT);
+
 const config = {
   integrations: {
     plentysystems: {
