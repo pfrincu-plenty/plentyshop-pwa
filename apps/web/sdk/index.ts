@@ -8,7 +8,8 @@ export const sapccExtension: any = {
       console.log(test, req);
       console.log(`Before each SAPCC method do something`);
     },
-    plentysystems_after: () => {
+    plentysystems_after: (test: unknown, req: unknown) => {
+      console.log(test, req);
       console.log(`After each SAPCC method do something`);
     }
   }
