@@ -76,6 +76,12 @@ export default defineNuxtConfig({
     '@vite-pwa/nuxt',
     'nuxt-vitest',
     'nuxt-lazy-hydrate',
+    [
+      '@storyblok/nuxt',
+      {
+        accessToken: 'u2fPkA4eCxmoae9rZlsqVgtt',
+      },
+    ]
   ],
   // eslint-disable-next-line unicorn/expiring-todo-comments
   // TODO: build is consistently failing because of this. check whether we need pre-render check.

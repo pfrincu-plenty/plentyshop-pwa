@@ -112,6 +112,8 @@
         <RecommendedProducts v-if="recommendedProducts" :products="recommendedProducts" />
       </NuxtLazyHydrate>
     </section>
+
+    <StoryblokComponent v-if="story" :blok="story.content" />
   </div>
 </template>
 
@@ -121,6 +123,7 @@ import { SfButton } from '@storefront-ui/vue';
 const { data: categoryTree } = useCategoryTree();
 const { data: recommendedProducts, fetchProductRecommended } = useProductRecommended('homepage');
 const firstCategoryId = categoryTree.value?.[0]?.id;
+const story = await useStoryblok('home', { version: 'draft' });
 
 onMounted(async () => {
   if (firstCategoryId) {
