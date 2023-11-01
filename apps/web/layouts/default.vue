@@ -201,6 +201,47 @@ const logOut = async () => {
   router.push('/');
 };
 
+const { send } = useNotification();
+
+onMounted(() => {
+  send({
+    persist: true,
+    message: 'Negative test',
+    type: 'negative',
+    action: {
+      text: 'Negative button',
+      onClick: () => {},
+    },
+  });
+  send({
+    persist: true,
+    message: 'primary test',
+    type: 'primary',
+    action: {
+      text: 'primary button',
+      onClick: () => {},
+    },
+  });
+  send({
+    persist: true,
+    message: 'secondary test',
+    type: 'secondary',
+    action: {
+      text: 'secondary button',
+      onClick: () => {},
+    },
+  });
+  send({
+    persist: true,
+    message: 'neutral test',
+    type: 'neutral',
+    action: {
+      text: 'neutral button',
+      onClick: () => {},
+    },
+  });
+});
+
 const accountDropdown = [
   {
     label: 'account.heading',
