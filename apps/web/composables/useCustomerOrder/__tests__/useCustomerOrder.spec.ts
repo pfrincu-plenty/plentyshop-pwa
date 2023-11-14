@@ -1,7 +1,18 @@
 import { useCustomerOrder } from '~/composables/useCustomerOrder/useCustomerOrder';
 
-describe('useCustomerOrder', () => {
-  it('should return customer order data', async () => {
+
+vi.mock('~/sdk', () => ({
+  useSdk: () => ({
+    plentysystems: {
+      getOrder: vi.fn(() => ({
+        data: {test: 'nice'}
+      })),
+    },
+  }),
+}));
+
+describe.only('useCustomerOrder', () => {
+  it.only('should return customer order data', async () => {
     const { fetchOrder, data } = useCustomerOrder('1');
 
     await fetchOrder({
