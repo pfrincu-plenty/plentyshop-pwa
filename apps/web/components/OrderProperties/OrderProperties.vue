@@ -1,5 +1,5 @@
 <template>
-  <div v-for="(group, groupIndex) in orderPropertiesGroups" :key="`group-${groupIndex}`" class="mt-5">
+  <div data-testid="order-properties" v-for="(group, groupIndex) in orderPropertiesGroups" :key="`group-${groupIndex}`" class="mt-5">
     <div class="font-semibold">
       {{ productPropertyGetters.getOrderPropertyGroupName(group) }}
     </div>
