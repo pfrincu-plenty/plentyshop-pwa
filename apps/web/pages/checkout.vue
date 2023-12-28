@@ -50,50 +50,7 @@
           />
         </div>
         <UiDivider class="w-screen md:w-auto -mx-4 md:mx-0 mb-10" />
-        <div class="text-sm mx-4 md:pb-0">
-          <div class="flex items-center">
-            <SfCheckbox
-              v-model="termsAccepted"
-              :invalid="showTermsError"
-              @change="showTermsError = false"
-              id="terms-checkbox"
-              class="inline-block mr-2"
-              data-testid="checkout-terms-checkbox"
-            />
-            <div>
-              <i18n-t keypath="termsInfo">
-                <template #terms>
-                  <SfLink
-                    :href="localePath(paths.termsAndConditions)"
-                    target="_blank"
-                    class="focus:outline focus:outline-offset-2 focus:outline-2 outline-secondary-600 rounded"
-                  >
-                    {{ $t('termsAndConditions') }}
-                  </SfLink>
-                </template>
-                <template #cancellationRights>
-                  <SfLink
-                    :href="localePath(paths.cancellationRights)"
-                    target="_blank"
-                    class="focus:outline focus:outline-offset-2 focus:outline-2 outline-secondary-600 rounded"
-                  >
-                    {{ $t('cancellationRights') }}
-                  </SfLink>
-                </template>
-                <template #privacyPolicy>
-                  <SfLink
-                    :href="localePath(paths.privacyPolicy)"
-                    target="_blank"
-                    class="focus:outline focus:outline-offset-2 focus:outline-2 outline-secondary-600 rounded"
-                  >
-                    {{ $t('privacyPolicy') }}
-                  </SfLink>
-                </template>
-              </i18n-t>
-            </div>
-          </div>
-          <div v-if="showTermsError" class="text-negative-700 text-sm mt-2">{{ $t('termsRequired') }}</div>
-        </div>
+        <CheckoutGeneralTerms />
       </div>
       <div class="col-span-5">
         <div v-for="cartItem in cart?.items" :key="cartItem.id">
@@ -101,6 +58,7 @@
         </div>
         <div class="relative md:sticky mt-4 md:top-20 h-fit" :class="{ 'pointer-events-none opacity-50': cartLoading }">
           <SfLoaderCircular v-if="cartLoading" class="absolute top-[130px] right-0 left-0 m-auto z-[999]" size="2xl" />
+          <Coupon class="my-5" />
           <OrderSummary v-if="cart" :cart="cart">
             <PayPalExpressButton
               type="Checkout"
@@ -153,7 +111,7 @@
 <script setup lang="ts">
 import { AddressType } from '@plentymarkets/shop-api';
 import { shippingProviderGetters, paymentProviderGetters } from '@plentymarkets/shop-sdk';
-import { SfButton, SfLink, SfCheckbox, SfLoaderCircular } from '@storefront-ui/vue';
+import { SfButton, SfLoaderCircular } from '@storefront-ui/vue';
 import _ from 'lodash';
 import PayPalExpressButton from '~/components/PayPal/PayPalExpressButton.vue';
 import { PayPalCreditCardPaymentKey, PayPalPaymentKey } from '~/composables/usePayPal/types';
@@ -172,6 +130,7 @@ const { send } = useNotification();
 const { data: cart, getCart, clearCartItems, loading: cartLoading } = useCart();
 const { data: billingAddresses, getAddresses: getBillingAddresses } = useAddress(AddressType.Billing);
 const { data: shippingAddresses, getAddresses: getShippingAddresses } = useAddress(AddressType.Shipping);
+const { checkboxValue: termsAccepted, setShowErrors } = useAgreementCheckbox('checkoutGeneralTerms');
 const {
   loading: loadShipping,
   data: shippingMethodData,
@@ -183,8 +142,6 @@ const { loading: createOrderLoading, createOrder } = useMakeOrder();
 const { shippingPrivacyAgreement, setShippingPrivacyAgreement } = useAdditionalInformation();
 const i18n = useI18n();
 const paypalCardDialog = ref(false);
-const termsAccepted = ref(false);
-const showTermsError = ref(false);
 const disableShippingPayment = computed(() => loadShipping.value || loadPayment.value);
 const paypalPaymentId = computed(() =>
   paymentProviderGetters.getIdByPaymentKey(paymentMethodData.value.list, PayPalPaymentKey),
@@ -194,9 +151,7 @@ const paypalCreditCardPaymentId = computed(() =>
 );
 
 const loadAddresses = async () => {
-  await getBillingAddresses();
-  await getShippingAddresses();
-  await getShippingMethods();
+  await Promise.all([getBillingAddresses(), getShippingAddresses(), getShippingMethods()]);
 };
 
 await loadAddresses();
@@ -233,8 +188,9 @@ const scrollToHTMLObject = (object: string) => {
 };
 
 const validateTerms = (): boolean => {
-  showTermsError.value = !termsAccepted.value;
-  if (showTermsError.value) {
+  setShowErrors(!termsAccepted.value);
+
+  if (!termsAccepted.value) {
     scrollToHTMLObject(ID_CHECKBOX);
     return false;
   }
@@ -272,25 +228,26 @@ const openPayPalCardDialog = () => {
   paypalCardDialog.value = true;
 };
 
-const order = async () => {
-  if (!validateAddresses() || !validateTerms()) {
-    return;
+const handleRegularOrder = async () => {
+  const data = await createOrder({
+    paymentId: paymentMethodData.value.selected,
+    shippingPrivacyHintAccepted: shippingPrivacyAgreement.value,
+  });
+
+  clearCartItems();
+
+  if (data?.order?.id) {
+    navigateTo(localePath(paths.thankYou + '/?orderId=' + data.order.id + '&accessKey=' + data.order.accessKey));
   }
+};
+
+const order = async () => {
+  if (!validateAddresses() || !validateTerms()) return;
+
   const paymentMethodsById = _.keyBy(paymentMethods.value.list, 'id');
 
-  if (paymentMethodsById[selectedPaymentId.value].key === 'plentyPayPal') {
-    paypalCardDialog.value = true;
-  } else {
-    const data = await createOrder({
-      paymentId: paymentMethodData.value.selected,
-      shippingPrivacyHintAccepted: shippingPrivacyAgreement.value,
-    });
-
-    clearCartItems();
-
-    if (data?.order?.id) {
-      navigateTo(localePath(paths.thankYou + '/?orderId=' + data.order.id + '&accessKey=' + data.order.accessKey));
-    }
-  }
+  paymentMethodsById[selectedPaymentId.value].key === 'plentyPayPal'
+    ? (paypalCardDialog.value = true)
+    : await handleRegularOrder();
 };
 </script>

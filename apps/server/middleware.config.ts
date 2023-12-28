@@ -1,5 +1,9 @@
 import dotenv from 'dotenv';
-dotenv.config();
+import * as path from 'path';
+
+dotenv.config({
+  path: path.resolve(__dirname, '../web/.env'),
+});
 
 const config = {
   integrations: {
@@ -7,10 +11,10 @@ const config = {
       location: '@plentymarkets/shop-api/server',
       configuration: {
         api: {
-          url: process.env.API_ENDPOINT
-        }
+          url: process.env.API_ENDPOINT,
+        },
       },
-    }
+    },
   },
 };
 

@@ -4,7 +4,7 @@
     data-testid="product-card"
   >
     <div class="relative">
-      <SfLink :tag="NuxtLink" :to="localePath(`${path}/${productSlug}`)">
+      <SfLink :tag="NuxtLink" rel="preload" :to="localePath(`${path}/${productSlug}`)" as="image">
         <NuxtImg
           :src="imageUrl"
           :alt="imageAlt"
@@ -12,9 +12,9 @@
           data-testid="image-slot"
           width="190"
           height="190"
-          :loading="lazy && !priority ? 'lazy' : undefined"
+          :loading="lazy && !priority ? 'lazy' : 'eager'"
           :fetchpriority="priority ? 'high' : undefined"
-          :preload="priority"
+          :preload="priority || false"
           format="webp"
         />
       </SfLink>
@@ -24,10 +24,10 @@
         {{ name }}
       </SfLink>
       <div class="flex items-center pt-1">
-        <!-- <SfRating size="xs" :value="rating ?? 0" :max="5" />
+        <SfRating size="xs" :value="rating ?? 0" :max="5" />
         <SfLink to="#" variant="secondary" :tag="NuxtLink" class="ml-1 no-underline">
           <SfCounter size="xs">{{ ratingCount }}</SfCounter>
-        </SfLink> -->
+        </SfLink>
       </div>
       <p class="block py-2 font-normal typography-text-xs text-neutral-700 text-justify">
         {{ description }}
@@ -38,23 +38,24 @@
       </div>
       <div class="flex items-center mt-auto">
         <span class="block pb-2 font-bold typography-text-sm" data-testid="product-card-vertical-price">
-          <span v-if="!productGetters.canBeAddedToCartFromCategoryPage(product) || cheapestPrice" class="mr-1"
-            >{{ $t('account.ordersAndReturns.orderDetails.priceFrom') }}
+          <span v-if="!productGetters.canBeAddedToCartFromCategoryPage(product)" class="mr-1"
+            >{{ i18n.t('account.ordersAndReturns.orderDetails.priceFrom') }}
           </span>
-          <span>{{ $n(cheapestPrice ?? mainPrice, 'currency') }}</span>
-          <span v-if="showNetPrices">{{ $t('asterisk') }} </span>
+          <span>{{ i18n.n(cheapestPrice ?? mainPrice, 'currency') }}</span>
+          <span v-if="showNetPrices">{{ i18n.t('asterisk') }} </span>
         </span>
         <span
           v-if="oldPrice && oldPrice !== mainPrice"
-          class="text-base typography-text-sm text-neutral-500 line-through ml-3 pb-2"
+          class="typography-text-sm text-neutral-500 line-through ml-3 pb-2"
         >
-          {{ $n(oldPrice, 'currency') }}
+          {{ i18n.n(oldPrice, 'currency') }}
         </span>
       </div>
       <SfButton
         v-if="productGetters.canBeAddedToCartFromCategoryPage(product)"
         size="sm"
         class="min-w-[80px] w-fit"
+        data-testid="add-to-basket-short"
         @click="addWithLoader(Number(productGetters.getId(product)))"
         :disabled="loading"
       >
@@ -63,11 +64,11 @@
         </template>
         <SfLoaderCircular v-if="loading" class="flex justify-center items-center" size="sm" />
         <span v-else>
-          {{ $t('addToCartShort') }}
+          {{ i18n.t('addToCartShort') }}
         </span>
       </SfButton>
       <SfButton v-else type="button" :tag="NuxtLink" :to="localePath(`${path}/${productSlug}`)" size="sm" class="w-fit">
-        <span>{{ $t('showArticle') }}</span>
+        <span>{{ i18n.t('showArticle') }}</span>
         <template #prefix>
           <SfIconChevronRight size="sm" />
         </template>
@@ -78,10 +79,19 @@
 
 <script setup lang="ts">
 import { productGetters } from '@plentymarkets/shop-sdk';
-import { SfLink, SfButton, SfIconShoppingCart, SfLoaderCircular, SfIconChevronRight } from '@storefront-ui/vue';
+import {
+  SfLink,
+  SfButton,
+  SfIconShoppingCart,
+  SfLoaderCircular,
+  SfIconChevronRight,
+  SfRating,
+  SfCounter,
+} from '@storefront-ui/vue';
 import type { ProductCardProps } from '~/components/ui/ProductCard/types';
 
 const localePath = useLocalePath();
+const i18n = useI18n();
 const { product } = withDefaults(defineProps<ProductCardProps>(), {
   lazy: true,
   imageAlt: '',
@@ -119,18 +129,10 @@ const mainPrice = computed(() => {
 
   return 0;
 });
-const cheapestPrice = computed(() => {
-  const price = productGetters.getCheapestGraduatedPrice(product);
-  if (price && price < mainPrice.value) {
-    return price;
-  }
-  return null;
-});
+
+const cheapestPrice = productGetters.getCheapestGraduatedPrice(product);
 const oldPrice = productGetters.getRegularPrice(product);
-
 const path = computed(() => productGetters.getCategoryUrlPath(product, categoryTree.value));
-
 const productSlug = computed(() => productGetters.getSlug(product) + `_${productGetters.getItemId(product)}`);
-
 const NuxtLink = resolveComponent('NuxtLink');
 </script>

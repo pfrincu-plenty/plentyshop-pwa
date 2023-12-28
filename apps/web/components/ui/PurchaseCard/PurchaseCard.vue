@@ -6,7 +6,11 @@
     <h1 class="mb-1 font-bold typography-headline-4" data-testid="product-name">
       {{ productGetters.getName(product) }}
     </h1>
-    <Price :price="currentActualPrice" :old-price="productGetters.getPrice(product).regular ?? 0" />
+    <Price
+      :price="currentActualPrice"
+      :normal-price="normalPrice"
+      :old-price="productGetters.getPrice(product).regular ?? 0"
+    />
     <LowestPrice :product="product" />
     <div v-if="productGetters.showPricePerUnit(product)">
       <BasePrice
@@ -16,8 +20,8 @@
       />
     </div>
     <div class="inline-flex items-center mt-4 mb-2">
-      <SfRating size="xs" :value="productGetters.getAverageRating(reviewAverage)" :max="5" />
-      <SfCounter class="ml-1" size="xs">{{ productGetters.getTotalReviews(reviewAverage) }}</SfCounter>
+      <SfRating size="xs" :value="reviewGetters.getAverageRating(reviewAverage)" :max="5" />
+      <SfCounter class="ml-1" size="xs">{{ reviewGetters.getTotalReviews(reviewAverage) }}</SfCounter>
       <SfLink variant="secondary" @click="scrollToReviews" class="ml-2 text-xs text-neutral-500 cursor-pointer">
         {{ $t('showAllReviews') }}
       </SfLink>
@@ -27,6 +31,9 @@
       data-testid="product-description"
       v-html="productGetters.getShortDescription(product)"
     ></div>
+
+    <OrderProperties v-if="product" :product="product" />
+
     <div class="mb-2">
       <AttributeSelect v-if="product" :product="product" />
     </div>
@@ -70,14 +77,14 @@
       <PayPalExpressButton
         class="mt-4"
         type="SingleItem"
-        :value="{ product: product, quantity: quantitySelectorValue }"
+        :value="{ product: product, quantity: quantitySelectorValue, basketItemOrderParams: getPropertiesForCart() }"
       />
     </div>
   </section>
 </template>
 
 <script setup lang="ts">
-import { productGetters } from '@plentymarkets/shop-sdk';
+import { productGetters, reviewGetters } from '@plentymarkets/shop-sdk';
 import {
   SfButton,
   SfCounter,
@@ -96,18 +103,25 @@ const props = defineProps<PurchaseCardProps>();
 
 const { product } = toRefs(props);
 
+const { getPropertiesForCart } = useProductOrderProperties();
 const { send } = useNotification();
 const { addToCart, loading } = useCart();
+const { getPropertiesPrice } = useProductOrderProperties();
 const { t } = useI18n();
 
 const quantitySelectorValue = ref(1);
 const currentActualPrice = computed(
   () =>
-    productGetters.getGraduatedPriceByQuantity(product.value, quantitySelectorValue.value)?.price.value ??
-    productGetters.getPrice(product.value)?.special ??
-    productGetters.getPrice(product.value)?.regular ??
-    0,
+    (productGetters.getGraduatedPriceByQuantity(product.value, quantitySelectorValue.value)?.price.value ??
+      productGetters.getPrice(product.value)?.special ??
+      productGetters.getPrice(product.value)?.regular ??
+      0) + getPropertiesPrice(product.value),
 );
+const normalPrice =
+  productGetters.getGraduatedPriceByQuantity(product.value, quantitySelectorValue.value)?.price.value ??
+  productGetters.getPrice(product.value)?.special ??
+  productGetters.getPrice(product.value)?.regular ??
+  0;
 const basePriceSingleValue = computed(
   () =>
     productGetters.getGraduatedPriceByQuantity(product.value, quantitySelectorValue.value)?.baseSinglePrice ??
@@ -115,12 +129,15 @@ const basePriceSingleValue = computed(
 );
 
 const handleAddToCart = async () => {
-  await addToCart({
+  const params = {
     productId: Number(productGetters.getId(product.value)),
     quantity: Number(quantitySelectorValue.value),
-  });
+    basketItemOrderParams: getPropertiesForCart(),
+  };
 
-  send({ message: t('addedToCart'), type: 'positive' });
+  if (await addToCart(params)) {
+    send({ message: t('addedToCart'), type: 'positive' });
+  }
 };
 
 const changeQuantity = (quantity: string) => {

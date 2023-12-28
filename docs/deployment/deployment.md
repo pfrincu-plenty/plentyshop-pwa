@@ -16,10 +16,9 @@ The following sections describe the steps in detail.
 4. Fill in the required information.
 5. **Create** the application.
 
-Creating the application adds a new table entry. In the next part, you'll need the following values:
+Creating the application adds a new table entry. In the next part, you'll need the following value:
 
 - **Access key**
-- **Upload Endpoint**
 
 ## GitHub
 
@@ -30,11 +29,9 @@ Creating the application adds a new table entry. In the next part, you'll need t
 3. In the **Security** section, go to **Secrets and variables » Actions**.
 4. Click on **New repository secret**.
 5. Fill in the information according to the table below.
-6. Repeat steps 4-5 for the second secret.
 
-| Name      | Value |
-| ----------- | ----------- |
-| `URL_ENDPOINT` | **Upload Endpoint** |
+| Name                 | Value          |
+| -------------------- | -------------- |
 | `URL_ENDPOINT_TOKEN` | **Access key** |
 
 ### System URL
@@ -46,8 +43,8 @@ Creating the application adds a new table entry. In the next part, you'll need t
 5. Click on **New repository variable**.
 6. Fill in the information according to the table below.
 
-| Name      | Value |
-| ----------- | ----------- |
+| Name      | Value            |
+| --------- | ---------------- |
 | `API_URL` | Your shop domain |
 
 ### Upload
@@ -74,7 +71,6 @@ The workflow takes several minutes to complete. You can monitor the progress in 
 
 The activation makes the application reachable on the configured domain.
 It can take up to 1 hour for the changes to take effect.
-
 
 ## Preview
 

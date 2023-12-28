@@ -1,39 +1,58 @@
 <template>
-  <div class="w-full bg-white flex items-center py-10 justify-center flex-col shadow-xl md:hidden">
-    <SfButton
-      v-for="locale in localeCodes"
-      :key="locale"
-      :variant="locale === currentLocale ? 'primary' : 'tertiary'"
-      square
-      :aria-label="$t('lang.' + locale)"
-      @click="switchLocale(locale)"
-      >{{ $t('lang.' + locale) }}</SfButton
-    >
+  <div
+    v-if="isDesktop || isTablet"
+    data-testid="languageSelectList"
+    class="w-full bg-white items-center py-10 justify-center flex"
+    :class="{ 'top-[10%]': isDesktop, 'flex-col': !isDesktop }"
+  >
+    <template v-for="locale in localeCodes" :key="locale">
+      <LanguageButton :locale="locale" :variant="locale === currentLocale ? 'primary' : 'tertiary'" class="ml-3 mb-2">
+        <div :class="{ 'w-6': isDesktop, 'w-8': !isDesktop }" v-html="flagList[locale]" />
+        <div>
+          {{ $t(`lang.${locale}`) }}
+        </div>
+      </LanguageButton>
+    </template>
   </div>
-  <div class="hidden md:flex w-full bg-white items-center py-10 justify-center absolute z-[99999] top-[10%] shadow-xl">
-    <SfButton
-      v-for="locale in localeCodes"
-      :key="locale"
-      :variant="locale === currentLocale ? 'primary' : 'tertiary'"
-      square
-      class="ml-3"
-      :aria-label="$t('lang.' + locale)"
-      @click="switchLocale(locale)"
-      >{{ $t('lang.' + locale) }}</SfButton
-    >
+
+  <div v-else data-testid="languageSelectList">
+    <UiModal v-model="isOpen" tag="section" class="!p-0 !pt-2.5 flex flex-col !w-11/12" aria-labelledby="login-modal">
+      <template v-for="locale in localeCodes" :key="locale">
+        <LanguageButton
+          :locale="locale"
+          variant="tertiary"
+          class="ml-3 mb-2 flex items-center justify-between !text-black"
+        >
+          <div class="flex">
+            <div :class="{ 'w-6': isDesktop, 'w-8': !isDesktop }" class="mr-2" v-html="flagList[locale]" />
+            <div class="!text-black-500">
+              {{ $t(`lang.${locale}`) }}
+            </div>
+          </div>
+          <SfIconCheck class="text-green-500" v-if="locale === currentLocale" />
+        </LanguageButton>
+      </template>
+    </UiModal>
   </div>
 </template>
 <script setup lang="ts">
-import { SfButton } from '@storefront-ui/vue';
+import { useDisclosure, SfIconCheck } from '@storefront-ui/vue';
+import { flagImports } from './flags';
 
-const { setLocaleCookie, localeCodes, locale: currentLocale } = useI18n();
-const route = useRoute();
-const switchLocalePath = useSwitchLocalePath();
-const { toggle } = useLanguageSelect();
+const { isOpen, open } = useDisclosure({ initialValue: false });
 
-const switchLocale = (language: string) => {
-  setLocaleCookie(language);
-  navigateTo({ path: switchLocalePath(language), query: route.query });
-  toggle();
+open();
+const { isDesktop, isTablet } = useBreakpoints();
+const { localeCodes, locale: currentLocale } = useI18n();
+
+const flagList: { [key: string]: string } = {};
+const dynamicFlagImport = async () => {
+  for (const local of localeCodes.value) {
+    const localLang = flagImports[local];
+    if (localLang) {
+      flagList[local] = localLang;
+    }
+  }
 };
+dynamicFlagImport();
 </script>

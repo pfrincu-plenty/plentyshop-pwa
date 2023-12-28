@@ -31,6 +31,51 @@
     "asterixHint": "* marked consents are required"
   },
   "CookieBar": {
+    "about": {
+      "label": "We value your privacy",
+      "description": "We use cookies and similar technologies on our website and process personal data of visitors to our website (e.g. IP address), e.g. to personalise content and advertisements, to integrate media from third-party providers or to analyse access to our website. Data processing only takes place when cookies are set. We share this data with third parties that we name in the settings. Data processing may be carried out with consent or on the basis of a legitimate interest. Consent can be given or refused. There is a right not to consent and to change or withdraw consent at a later date. We provide more information about the use of personal data and the services in our"
+    },
+    "essentials": {
+      "label": "Essentials",
+      "description": "Essential cookies enable basic functions and are necessary for the proper functioning of the website.",
+      "cookies": {
+        "plentyId": {
+          "name": "plentyID",
+          "provider": "plentysystems AG",
+          "status": "Stores information about the current session, for example if the user is logged in."
+        },
+        "vsfLocale": {
+          "name": "vsf-locale",
+          "provider": "plentysystems AG",
+          "status": "Stores the display language."
+        },
+        "consentCookie": {
+          "name": "consent-cookie",
+          "provider": "plentysystems AG",
+          "status": "Stores consent selection."
+        }
+      }
+    },
+    "externalMedia": {
+      "label": "External media",
+      "description": "Content by video platforms and social media platforms are blocked by default. If you accept cookies by external media, access to these contents requires no further consent."
+    },
+    "functional": {
+      "label": "Functional",
+      "description": "These cookies are used to store preferred settings and certain options selected by the user.",
+      "cookies": {
+        "scriptDemo": {
+          "name": "Script demo",
+          "provider": "plentysystems AG",
+          "status": "Usage example for loading a script after consent."
+        }
+      }
+    },
+    "marketing": {
+      "label": "Marketing",
+      "description": "Marketing cookies are used by third parties and publishers to display personalised advertisements by following users across websites."
+    },
+    "Cookie Settings": "Cookie Settings",
     "Privacy Settings": "Privacy Settings",
     "More information": "More information",
     "Further Settings": "Further Settings",
@@ -39,6 +84,10 @@
     "Accept All": "Accept All",
     "Reject All": "Reject All",
     "Accept Selection": "Accept Selection"
+  },
+  "PreviewModeBar": {
+    "label": "Preview mode control",
+    "pwa": "Deactivate plentyShop PWA preview"
   },
   "documents": {
     "correctionDocuments": "Correction Documents",
@@ -99,11 +148,11 @@
   "emptyStateText2": "Have not found what you are looking for?",
   "emptyStateAltText": "Image that describes that no products were found",
   "resultsFor": "Results for \"{phrase}\"",
-  "prevAriaLabel": "Go to previous page",
-  "nextAriaLabel": "Go to next page",
-  "secondPageAriaLabel": "Second page",
-  "lastPageAriaLabel": "Last page",
-  "currentPage": "Page {page} of {totalPages}",
+  "pagination": "Paginated Navigation",
+  "prevAriaLabel": "Navigate to previous page",
+  "nextAriaLabel": "Navigate to next page",
+  "currentPage": "Current Page is {page}",
+  "goToPage": "Navigate to Page {page}",
   "checkout": "Checkout",
   "backToCart": "Back to My Cart",
   "back": "Back",
@@ -159,7 +208,7 @@
   "addedToCart": "Item added to Cart",
   "deletedFromCart": "Item removed from shopping cart",
   "search": "Search",
-  "openSearchModalButtonLabel": "Click to open search modal",
+  "openSearchModalButtonLabel": "Open item search",
   "vsfHomepage": "VSF Homepage",
   "home": "Home",
   "products": "Products",
@@ -171,7 +220,7 @@
   "quantitySelectorIncrease": "Increase value",
   "scrollTop": "Scroll to top",
   "numberInCart": "{count} product in cart",
-  "languageSelector": "Language selection",
+  "languageSelector": "Open language select",
   "allProductsLinkText": "Browse products",
   "breadcrumbsDropdownText": "Show more breadcrumbs",
   "youAreOfflineText": "It seems you are currently offline, check your internet connection",
@@ -275,6 +324,7 @@
   "backToCheckout": "Back to Checkout",
   "continueShopping": "Continue shopping",
   "orderErrorMessage": "Something went wrong. Try again later.",
+  "orderErrorProvider": "Unknown response from payment provider: {paymentType}",
   "orderNumber": "Order ID",
   "productDetails": "Product details",
   "technicalData": "Technical data",
@@ -448,7 +498,7 @@
   "excludedShipping": "excl. Shipping",
   "lang": {
     "en": "English",
-    "de":"German"
+    "de": "German"
   },
   "softLogin": {
     "titleLogin": "Log in to your account to access your order",
@@ -488,5 +538,87 @@
     "contactSend": "Send request",
     "clearAll": "Clear all",
     "privacyPolicy": "I hereby confirm that I have read the {privacyPolicy}."
+  },
+  "newsletter": {
+    "heading": "Subscribe to our Newsletter",
+    "policy": "I hereby confirm that I have read the {privacyPolicy}. I can revoke my consent at any time.",
+    "subscribe": "Subscribe To Newsletter",
+    "info": "Be aware of upcoming sales and events. Receive gifts and special offers!",
+    "success": "Newsletter successfully subscribed",
+    "termsRequired": "You must accept the terms and conditions.",
+    "firstName": "Firstname",
+    "lastName": "Lastname",
+    "email": "Email"
+  },
+  "coupon": {
+    "name": "Coupon",
+    "title": "Have a coupon code?",
+    "enterCode": "Enter code",
+    "apply": "Apply",
+    "remove": "Remove",
+    "couponApplied": "The coupon has been added successfully",
+    "couponRemoved": "The coupon has been removed successfully.",
+    "couponInvalid": "The coupon has already been used or is invalid."
+  },
+  "error": {
+    "errorActionIsNotExecuted": "This action could not be executed.",
+    "notificationsItemNotAdded": "The item could not be added.",
+    "notificationsNotEnoughStockItem": "There is not enough stock available for the selected item quantity.",
+    "notificationsInvalidResetPasswordUrl": "The entered URL is invalid or expired.",
+    "notificationsCheckPassword": "The passwords do not match.",
+    "notificationsItemBundleSplitted": "Item bundle has been split.",
+    "notificationsItemOutOfStock": "Insufficient stock",
+    "newsletterOptOutSuccessMessage": "You have successfully unsubscribed from our newsletter.",
+    "newsletterOptInMessage": "Your email address has been confirmed.",
+    "notificationsBasketItemsRemoved": "Items have been removed from your shopping cart because they are currently not available.",
+    "notificationsBasketItemsRemovedForLanguage": "Items have been removed from your shopping cart because they are not available in the selected language.",
+    "notificationsNoEmailEntered": "Please enter a valid email address.",
+    "notificationsWarningOverselling": "The selected quantity exceeds the available stock. :stock are currently in stock; :oversellingAmount will be supplied later.",
+    "consentReCaptchaCookieNotSet": "The reCAPTCHA script has not been accepted. reCAPTCHA cannot be carried out. Forms cannot be sent.",
+    "notificationsBasketItemsRemovedForCurrency": "Items have been removed from your shopping cart because they are not available in the selected currency.",
+    "notificationsBasketItemsRemovedForShippingCountry": "Items have been removed from your shopping cart because they are not available for the selected shipping country.",
+    "notificationsBasketItemsRemovedForContactClass": "Items have been removed from your shopping cart because they are not available for this customer account.",
+    "errorBasketItemVariationNotFound": "This variation is not available.",
+    "errorBasketItemNotEnoughStockForVariation": "The selected quantity could not be added to the shopping cart because it exceeds the available stock. :stock are currently in stock.",
+    "errorBasketItemMaximumQuantityReachedForItem": "Your order exceeds the maximum order quantity of this item.",
+    "errorBasketItemMaximumQuantityReachedForVariation": "Your order exceeds the maximum order quantity of this variation.",
+    "errorBasketItemMinimumQuantityNotReachedForVariation": "Your order does not fulfil the minimum order quantity of this variation.",
+    "errorCreateOrderRetryTimeNotReached": "An error occurred while placing the order. Please try again in 30 seconds.",
+    "errorVatService": "Your VAT number could not be validated. Please contact the online store operator.",
+    "errorVatNumberValidation": "Your VAT number is invalid. Please remove any spaces and special characters.",
+    "errorVatServiceFallback": "Your VAT number could not be validated. The order will be reviewed again.",
+    "notificationRemoveCouponMinimumOrderValueIsNotReached": "The redeemed coupon has been removed. The minimum order value was not reached.",
+    "couponNoMatchingItemInBasket": "The coupon code has been removed since no item in the shopping cart has been activated for this coupon.",
+    "notificationsCalculateShippingFailed": "Error while calculating shipping costs. Please contact the provider.",
+    "couponPromotionRequired": "You can only purchase the variation of this item if you redeem a promotional coupon.",
+    "errorGiftCardReturnQuantity": "The return could not be created. You need to return all gift cards included in the order.",
+    "couponMinOrderValueNotReached": "The coupon code has been removed since the required value of goods has not been reached. Please insert the code again when the required value of goods is reached.",
+    "couponnotUsableForSpecialOffer": "The coupon could not be redeemed. Coupons cannot be used for bargain offers.",
+    "couponCampaignExpired": "Unfortunately, the coupon has expired.",
+    "couponOnlySubscription": "The coupon can only be redeemed for subscription items.",
+    "couponOnlySingleUsage": "The coupon cannot be redeemed for subscription items.",
+    "couponNoOpenAmount": "The coupon has already been redeemed completely.",
+    "couponExpired": "Unfortunately, the coupon has expired.",
+    "couponOnlyForNewCustomers": "The coupon can only be redeemed by new customers.",
+    "couponOnlyForExistingCustomers": "The coupon can only be redeemed by existing customers.",
+    "couponWrongCustomerGroup": "The coupon can only be redeemed by customers with the correct customer class.",
+    "couponWrongCustomerType": "The coupon can only be redeemed by customers with the correct customer type.",
+    "couponNoCustomerTypeProvided": "The coupon could not be redeemed. Customer type not transferred.",
+    "couponNoCustomerTypeActivated": "The coupon could not be redeemed. Customer type not activated.",
+    "couponNoCustomerGroupActivated": "The coupon could not be redeemed. Customer class not activated.",
+    "couponCampaignNoWebstoreActivated": "The coupon could not be redeemed. Client not activated.",
+    "couponCampaignWrongWebstoreId": "The coupon could not be redeemed. Incorrect client.",
+    "couponCampaignNoWebstoreIdGiven": "The coupon could not be redeemed. Client ID not transferred.",
+    "csrfTokenMismatch": "You have been logged out for security reasons. You will be redirected to the login page.",
+    "accessKeyMailSent": "Email sent!",
+    "accessKeyMailFailed": "Email could not be delivered, please contact the webshop owner.",
+    "couponAlreadyUsedOrInvalidCouponCode": "The coupon has already been used or is invalid.",
+    "couponRemoveFailure": "The coupon could not be removed."
+  },
+  "orderProperties": {
+    "vat": {
+      "incl": "incl.",
+      "plus": "plus"
+    }
   }
 }

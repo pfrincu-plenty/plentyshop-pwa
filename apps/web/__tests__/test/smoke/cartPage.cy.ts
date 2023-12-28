@@ -1,19 +1,25 @@
 import { CartPageObject } from '../../support/pageObjects/CartPageObject';
-import { HomePageObject } from '../../support/pageObjects/HomePageObject';
-import { ProductListPageObject } from '../../support/pageObjects/ProductListPageObject';
-import { paths } from '../../../utils/paths';
 
 const cart = new CartPageObject();
-const homePage = new HomePageObject();
-const productListPage = new ProductListPageObject();
 
 describe('Smoke: Cart Page', () => {
-  it('[smoke] Add items to cart and display it', () => {
-    cy.visit(paths.home);
+  it('[smoke] Add coupon to cart, check the totals, then remove coupon and check totals again', () => {
+    cy.visitAndHydrate('/study-room-office/office-chair/design-chair-brookhaven-leather-black_105_1003');
 
-    homePage.goToCategory();
-    productListPage.addToCart()
+    cy.wait(1000)
+      .intercept('/plentysystems/doAddCartItem')
+      .as('doAddCartItem')
+      .getByTestId('add-to-cart')
+      .click()
+      .wait('@doAddCartItem');
 
-    cart.openCart().checkCart();
+    cart
+      .openCart()
+      .hasOrderSummary()
+      .openCouponAccordion()
+      .addCoupon('KB82AZ')
+      .orderSummaryAfterCouponApplied()
+      .removeCoupon()
+      .orderSummaryAfterCouponRemoved();
   });
 });
