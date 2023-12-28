@@ -8,7 +8,7 @@
           <slot name="tooltip" />
         </span>
       </div>
-      <SfSelect v-model="value" size="sm" placeholder="-- Select --">
+      <SfSelect data-testid="order-properties-select" v-model="value" size="sm" placeholder="-- Select --">
         <option v-for="{ value, label } in options" :key="value" :value="value">
           {{ label }}
         </option>

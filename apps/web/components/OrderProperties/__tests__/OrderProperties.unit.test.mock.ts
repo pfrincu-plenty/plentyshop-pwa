@@ -1,4 +1,6 @@
-export const product = {
+import { Product } from "@plentymarkets/shop-api";
+
+export const product: Product = {
     "defaultCategories": [
         {
             "id": 17,
@@ -161,64 +163,7 @@ export const product = {
         }
     ],
     "properties": [
-        {
-            "propertySelectionId": null,
-            "propertySelection": [],
-            "propertyId": 36,
-            "surcharge": 0,
-            "group": {
-                "id": 4,
-                "names": {
-                    "createdAt": "2023-12-04 13:40:50",
-                    "lang": "en",
-                    "name": "Order properties",
-                    "description": "",
-                    "id": 10,
-                    "groupId": 4,
-                    "updatedAt": "2023-12-04 13:40:50"
-                },
-                "backendName": "",
-                "orderPropertyGroupingType": "none",
-                "isSurchargePercental": false
-            },
-            "property": {
-                "id": 36,
-                "position": 0,
-                "valueType": "selection",
-                "isOderProperty": true,
-                "isShownAsAdditionalCosts": false,
-                "isRequired": true,
-                "isPreSelected": true,
-                "isShownOnItemPage": true,
-                "isShownOnItemList": true,
-                "isShownAtCheckout": true,
-                "surcharge": 0,
-                "vatId": null,
-                "names": {
-                    "lang": "en",
-                    "name": "Order prop selection EN",
-                    "description": "Selection description EN",
-                    "propertyId": "36"
-                },
-                "selectionValues": {
-                    "11": {
-                        "id": 11,
-                        "name": "Select 1 EN",
-                        "description": ""
-                    },
-                    "12": {
-                        "id": 12,
-                        "name": "Select 2 EN",
-                        "description": ""
-                    },
-                    "13": {
-                        "id": 13,
-                        "name": "Select 3 EN",
-                        "description": ""
-                    }
-                }
-            }
-        },
+        
         {
             "propertySelectionId": null,
             "propertySelection": [],
@@ -228,8 +173,6 @@ export const product = {
                 "id": 4,
                 "names": {
                     "lang": "en",
-                    "updatedAt": "2023-12-04 13:40:50",
-                    "createdAt": "2023-12-04 13:40:50",
                     "id": 10,
                     "name": "Order properties",
                     "groupId": 4,
@@ -272,9 +215,7 @@ export const product = {
                     "groupId": 4,
                     "lang": "en",
                     "name": "Order properties",
-                    "createdAt": "2023-12-04 13:40:50",
                     "id": 10,
-                    "updatedAt": "2023-12-04 13:40:50",
                     "description": ""
                 },
                 "backendName": "",
@@ -311,8 +252,6 @@ export const product = {
             "group": {
                 "id": 4,
                 "names": {
-                    "updatedAt": "2023-12-04 13:40:50",
-                    "createdAt": "2023-12-04 13:40:50",
                     "groupId": 4,
                     "id": 10,
                     "name": "Order properties",
@@ -353,9 +292,7 @@ export const product = {
             "group": {
                 "id": 4,
                 "names": {
-                    "createdAt": "2023-12-04 13:40:50",
                     "lang": "en",
-                    "updatedAt": "2023-12-04 13:40:50",
                     "id": 10,
                     "groupId": 4,
                     "name": "Order properties",
@@ -385,7 +322,6 @@ export const product = {
                     "propertyId": "20"
                 },
                 "selectionValues": [],
-                "value": true
             }
         },
         {
@@ -397,9 +333,7 @@ export const product = {
                 "id": 4,
                 "names": {
                     "groupId": 4,
-                    "createdAt": "2023-12-04 13:40:50",
                     "description": "",
-                    "updatedAt": "2023-12-04 13:40:50",
                     "name": "Order properties",
                     "lang": "en",
                     "id": 10
@@ -428,7 +362,6 @@ export const product = {
                     "propertyId": "21"
                 },
                 "selectionValues": [],
-                "value": true
             }
         },
         {
@@ -440,10 +373,8 @@ export const product = {
                 "id": 4,
                 "names": {
                     "lang": "en",
-                    "updatedAt": "2023-12-04 13:40:50",
                     "id": 10,
                     "description": "",
-                    "createdAt": "2023-12-04 13:40:50",
                     "name": "Order properties",
                     "groupId": 4
                 },
@@ -471,7 +402,6 @@ export const product = {
                     "propertyId": "22"
                 },
                 "selectionValues": [],
-                "value": true
             }
         },
         {
@@ -482,13 +412,11 @@ export const product = {
             "group": {
                 "id": 4,
                 "names": {
-                    "createdAt": "2023-12-04 13:40:50",
                     "lang": "en",
                     "name": "Order properties",
                     "description": "",
                     "id": 10,
                     "groupId": 4,
-                    "updatedAt": "2023-12-04 13:40:50"
                 },
                 "backendName": "",
                 "orderPropertyGroupingType": "none",
@@ -525,8 +453,6 @@ export const product = {
                 "id": 4,
                 "names": {
                     "groupId": 4,
-                    "createdAt": "2023-12-04 13:40:50",
-                    "updatedAt": "2023-12-04 13:40:50",
                     "description": "",
                     "lang": "en",
                     "name": "Order properties",
@@ -556,7 +482,6 @@ export const product = {
                     "propertyId": "23"
                 },
                 "selectionValues": [],
-                "value": true
             }
         },
         {
@@ -567,9 +492,7 @@ export const product = {
             "group": {
                 "id": 4,
                 "names": {
-                    "createdAt": "2023-12-04 13:40:50",
                     "lang": "en",
-                    "updatedAt": "2023-12-04 13:40:50",
                     "id": 10,
                     "groupId": 4,
                     "name": "Order properties",
@@ -612,10 +535,8 @@ export const product = {
                     "name": "Order properties",
                     "id": 10,
                     "groupId": 4,
-                    "createdAt": "2023-12-04 13:40:50",
                     "description": "",
                     "lang": "en",
-                    "updatedAt": "2023-12-04 13:40:50"
                 },
                 "backendName": "",
                 "orderPropertyGroupingType": "none",
@@ -656,8 +577,6 @@ export const product = {
                     "name": "Order properties",
                     "description": "",
                     "groupId": 4,
-                    "createdAt": "2023-12-04 13:40:50",
-                    "updatedAt": "2023-12-04 13:40:50"
                 },
                 "backendName": "",
                 "orderPropertyGroupingType": "none",
@@ -693,10 +612,8 @@ export const product = {
             "group": {
                 "id": 4,
                 "names": {
-                    "createdAt": "2023-12-04 13:40:50",
                     "id": 10,
                     "lang": "en",
-                    "updatedAt": "2023-12-04 13:40:50",
                     "groupId": 4,
                     "name": "Order properties",
                     "description": ""
@@ -735,8 +652,6 @@ export const product = {
             "group": {
                 "id": 4,
                 "names": {
-                    "createdAt": "2023-12-04 13:40:50",
-                    "updatedAt": "2023-12-04 13:40:50",
                     "description": "",
                     "groupId": 4,
                     "id": 10,
@@ -780,10 +695,8 @@ export const product = {
                     "id": 10,
                     "groupId": 4,
                     "name": "Order properties",
-                    "updatedAt": "2023-12-04 13:40:50",
                     "description": "",
                     "lang": "en",
-                    "createdAt": "2023-12-04 13:40:50"
                 },
                 "backendName": "",
                 "orderPropertyGroupingType": "none",
@@ -820,10 +733,8 @@ export const product = {
                 "id": 4,
                 "names": {
                     "lang": "en",
-                    "updatedAt": "2023-12-04 13:40:50",
                     "id": 10,
                     "description": "",
-                    "createdAt": "2023-12-04 13:40:50",
                     "name": "Order properties",
                     "groupId": 4
                 },
@@ -851,7 +762,6 @@ export const product = {
                     "propertyId": "27"
                 },
                 "selectionValues": [],
-                "value": true
             }
         },
         {
@@ -865,8 +775,6 @@ export const product = {
                     "groupId": 4,
                     "name": "Order properties",
                     "description": "",
-                    "createdAt": "2023-12-04 13:40:50",
-                    "updatedAt": "2023-12-04 13:40:50",
                     "lang": "en",
                     "id": 10
                 },
@@ -893,8 +801,7 @@ export const product = {
                     "description": "",
                     "propertyId": "26"
                 },
-                "selectionValues": [],
-                "value": true
+                "selectionValues": []
             }
         },
         {
@@ -909,9 +816,7 @@ export const product = {
                     "name": "Order properties",
                     "lang": "en",
                     "id": 10,
-                    "createdAt": "2023-12-04 13:40:50",
                     "description": "",
-                    "updatedAt": "2023-12-04 13:40:50"
                 },
                 "backendName": "",
                 "orderPropertyGroupingType": "none",
@@ -947,10 +852,8 @@ export const product = {
             "group": {
                 "id": 4,
                 "names": {
-                    "updatedAt": "2023-12-04 13:40:50",
                     "description": "",
                     "groupId": 4,
-                    "createdAt": "2023-12-04 13:40:50",
                     "name": "Order properties",
                     "id": 10,
                     "lang": "en"
@@ -992,10 +895,8 @@ export const product = {
                     "id": 10,
                     "groupId": 4,
                     "name": "Order properties",
-                    "updatedAt": "2023-12-04 13:40:50",
                     "description": "",
                     "lang": "en",
-                    "createdAt": "2023-12-04 13:40:50"
                 },
                 "backendName": "",
                 "orderPropertyGroupingType": "none",
@@ -1034,10 +935,8 @@ export const product = {
                     "name": "Order properties",
                     "id": 10,
                     "groupId": 4,
-                    "createdAt": "2023-12-04 13:40:50",
                     "description": "",
                     "lang": "en",
-                    "updatedAt": "2023-12-04 13:40:50"
                 },
                 "backendName": "",
                 "orderPropertyGroupingType": "none",
@@ -1074,12 +973,10 @@ export const product = {
                 "id": 4,
                 "names": {
                     "id": 10,
-                    "createdAt": "2023-12-04 13:40:50",
                     "name": "Order properties",
                     "groupId": 4,
                     "description": "",
                     "lang": "en",
-                    "updatedAt": "2023-12-04 13:40:50"
                 },
                 "backendName": "",
                 "orderPropertyGroupingType": "none",
@@ -1115,13 +1012,11 @@ export const product = {
             "group": {
                 "id": 4,
                 "names": {
-                    "createdAt": "2023-12-04 13:40:50",
                     "lang": "en",
                     "name": "Order properties",
                     "description": "",
                     "id": 10,
                     "groupId": 4,
-                    "updatedAt": "2023-12-04 13:40:50"
                 },
                 "backendName": "",
                 "orderPropertyGroupingType": "none",
@@ -1158,8 +1053,6 @@ export const product = {
                 "id": 4,
                 "names": {
                     "name": "Order properties",
-                    "updatedAt": "2023-12-04 13:40:50",
-                    "createdAt": "2023-12-04 13:40:50",
                     "description": "",
                     "lang": "en",
                     "id": 10,
