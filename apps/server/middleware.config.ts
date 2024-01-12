@@ -5,6 +5,8 @@ dotenv.config({
   path: path.resolve(__dirname, '../web/.env'),
 }); */
 
+dotenv.config();
+
 const config = {
   integrations: {
     plentysystems: {
