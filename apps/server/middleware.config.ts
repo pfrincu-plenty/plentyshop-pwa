@@ -2,6 +2,7 @@ import dotenv from 'dotenv';
 import * as path from 'path';
 
 let endpoint = '';
+dotenv.config();
 if(process.env.API_ENDPOINT){
   endpoint = process.env.API_ENDPOINT
 } else {
