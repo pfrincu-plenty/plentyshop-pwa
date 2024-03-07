@@ -4,13 +4,18 @@
     class="p-4 xl:p-6 md:border md:border-neutral-100 md:shadow-lg md:rounded-md md:sticky md:top-40"
     data-testid="purchase-card"
   >
-    <div class="grid grid-cols-[2fr_1fr] mt-4 gap-x-4">
+    <div class="grid grid-cols-[2fr_1fr] mt-4">
       <h1 class="mb-1 font-bold typography-headline-4" data-testid="product-name">
         {{ productGetters.getName(product) }}
       </h1>
       <div class="flex items-center justify-center">
         <WishlistButton v-if="isDesktop" :product="product" :quantity="quantitySelectorValue">
-          {{ t('addProductToWishlist') }}
+          <template v-if="!isWishlistItem(productGetters.getVariationId(product))">
+            {{ t('addToWishlist') }}
+          </template>
+          <template v-else>
+            {{ t('removeFromWishlist') }}
+          </template>
         </WishlistButton>
 
         <WishlistButton
@@ -22,6 +27,7 @@
         />
       </div>
     </div>
+    <UiTags class="my-2" :product="product" />
     <Price
       :price="currentActualPrice"
       :normal-price="normalPrice"
@@ -49,11 +55,9 @@
     ></div>
 
     <OrderProperties v-if="product" :product="product" />
-
-    <div class="mb-2">
-      <AttributeSelect v-if="product" :product="product" />
-    </div>
+    <ProductAttributes v-if="product" :product="product" />
     <GraduatedPriceList v-if="product" :product="product" :count="quantitySelectorValue" />
+
     <div class="py-4">
       <div class="flex flex-col md:flex-row flex-wrap gap-4">
         <UiQuantitySelector
@@ -64,7 +68,7 @@
         <SfTooltip
           show-arrow
           placement="top"
-          :label="isSalableText"
+          :label="isNotValidVariation || isSalableText"
           class="flex-grow-[2] flex-shrink basis-auto whitespace-nowrap"
         >
           <SfButton
@@ -72,7 +76,8 @@
             data-testid="add-to-cart"
             size="lg"
             class="w-full"
-            :disabled="loading || invalidFields.length > 0 || !productGetters.isSalable(product)"
+            :disabled="loading || !productGetters.isSalable(product)"
+            :class="{ '!bg-disabled-300 !text-disabled-500 !ring-0 !shadow-none': !getCombination() }"
           >
             <template #prefix v-if="!loading">
               <SfIconShoppingCart size="sm" />
@@ -107,6 +112,7 @@
         class="mt-4"
         type="SingleItem"
         :value="{ product: product, quantity: quantitySelectorValue, basketItemOrderParams: getPropertiesForCart() }"
+        v-if="getCombination()"
       />
     </div>
   </form>
@@ -124,23 +130,30 @@ import {
   SfTooltip,
 } from '@storefront-ui/vue';
 import type { PurchaseCardProps } from '~/components/ui/PurchaseCard/types';
-import { useValidatorAggregatorProperties } from '~/composables/useValidatorAggregator';
 
 const runtimeConfig = useRuntimeConfig();
 const showNetPrices = runtimeConfig.public.showNetPrices;
 
 const props = defineProps<PurchaseCardProps>();
-
 const { product } = toRefs(props);
 
 const { isDesktop } = useBreakpoints();
+const { getCombination } = useProductAttributes();
 const { getPropertiesForCart, getPropertiesPrice } = useProductOrderProperties();
-const { validateAllFields, invalidFields } = useValidatorAggregatorProperties();
+const { validateAllFields, invalidFields, resetInvalidFields } = useValidatorAggregator('properties');
+const {
+  validateAllFields: validateAllFieldsAttributes,
+  invalidFields: invalidAttributeFields,
+  resetInvalidFields: resetAttributeFields,
+} = useValidatorAggregator('attributes');
 const { send } = useNotification();
 const { addToCart, loading } = useCart();
 const { t } = useI18n();
-
 const quantitySelectorValue = ref(1);
+const { isWishlistItem } = useWishlist();
+
+resetInvalidFields();
+resetAttributeFields();
 
 const currentActualPrice = computed(
   () =>
@@ -163,7 +176,29 @@ const basePriceSingleValue = computed(
 );
 
 const handleAddToCart = async () => {
-  if (await validateAllFields().then((validatedFields) => validatedFields.some((field) => !field.valid))) return;
+  await validateAllFieldsAttributes();
+  await validateAllFields();
+  if (invalidFields.value.length > 0 || invalidAttributeFields.value.length > 0) {
+    const invalidFieldsNames = invalidFields.value.map((field) => field.name);
+    const invalidAttributeFieldsNames = invalidAttributeFields.value.map((field) => field.name);
+    send({
+      message: [
+        t('errorMessages.missingOrWrongProperties'),
+        '',
+        ...invalidAttributeFieldsNames,
+        ...invalidFieldsNames,
+        '',
+        t('errorMessages.pleaseFillOutAllFields'),
+      ],
+      type: 'negative',
+    });
+    return;
+  }
+
+  if (!getCombination()) {
+    send({ message: t('productAttributes.notValidVariation'), type: 'negative' });
+    return;
+  }
 
   const params = {
     productId: Number(productGetters.getId(product.value)),
@@ -206,6 +241,7 @@ const scrollToReviewsAccordion = () => {
 };
 
 const isSalableText = computed(() => (productGetters.isSalable(product.value) ? '' : t('itemNotAvailable')));
+const isNotValidVariation = computed(() => (getCombination() ? '' : t('productAttributes.notValidVariation')));
 
 const scrollToReviews = () => {
   if (!isReviewsAccordionOpen()) {

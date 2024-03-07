@@ -215,7 +215,10 @@
   "products": "Products",
   "cart": "Cart",
   "wishlist": "Wishlist",
+  "addToWishlist": "Add to wishlist",
+  "removeFromWishlist": "Remove from wishlist",
   "addProductToWishlist": "Add {label} to wishlist",
+  "removeProductFromWishlist": "Remove {label} from wishlist",
   "wishlistInteraction": {
     "delete": "The item was removed from your wish list.",
     "add": "The item was added to your wish list."
@@ -292,36 +295,11 @@
       }
     }
   },
-  "contactOptions": {
-    "helpCenter": {
-      "label": "Help center",
-      "details": {
-        "description": "Find answers online anytime"
-      }
-    },
-    "liveChat": {
-      "label": "Live chat",
-      "details": {
-        "openingHours-1": "Mon–Fri, 5am–10pm PT",
-        "openingHours-2": "Sat–Sun, 6am–9pm PT"
-      }
-    },
-    "phone": {
-      "label": "1 234 567 8901",
-      "details": {
-        "openingHours-1": "Mon–Fri, 5am–10pm PT",
-        "openingHours-2": "Sat–Sun, 6am–9pm PT"
-      }
-    }
-  },
-  "bottomLinks": {
-    "terms": "Terms",
-    "privacyPolicy": "Privacy policy"
-  },
   "socialLabel": "Go to {label} page",
   "failedInfoHeader": "We are really sorry.",
   "failedInfoMessage": "Your order has not been completed.",
-  "successInfoHeader": "Thank you!",
+  "successInfoOrderHeader": "Thank you for you order!",
+  "successInfoReturnHeader": "Thank you for you return!",
   "successInfoMessage": "Your order was completed successfully.",
   "etaDelivery": "Estimated delivery time",
   "shippingAddress": "Shipping address",
@@ -332,6 +310,7 @@
   "orderErrorMessage": "Something went wrong. Try again later.",
   "orderErrorProvider": "Unknown response from payment provider: {paymentType}",
   "orderNumber": "Order ID",
+  "returnNumber": "Return ID",
   "productDetails": "Product details",
   "technicalData": "Technical data",
   "customerReviews": "Customer Reviews",
@@ -358,7 +337,8 @@
   },
   "account": {
     "heading": "My Account",
-    "navBarBottomHeading": "Account",
+    "navBottomHeadingAccount": "Account",
+    "navBottomHeadingLogin": "Login",
     "logout": "Logout",
     "back": "Back",
     "accountSettings": {
@@ -399,14 +379,17 @@
     "ordersAndReturns": {
       "heading": "Orders & Returns",
       "orderId": "Order ID",
-      "orderDate": "Order date",
+      "returnId": "Return-ID",
+      "orderNumber": "Order Number",
+      "orderDate": "Order Date",
       "shippingDate": "Shipping date",
-      "returnDate": "Return date",
+      "returnDate": "Return Date",
       "amount": "Amount",
       "status": "Status",
       "details": "Details",
       "myOrders": "My orders",
       "noOrders": "You haven’t shopped with us yet",
+      "noReturns": "You don't have any returns yet.",
       "continue": "Continue shopping",
       "noOrdersAltText": "No orders",
       "returnsHeading": "Returns",
@@ -571,6 +554,7 @@
     "remove": "Remove",
     "couponApplied": "The coupon has been added successfully",
     "couponRemoved": "The coupon has been removed successfully.",
+    "pleaseProvideCoupon": "Please enter a valid coupon code.",
     "couponInvalid": "The coupon has already been used or is invalid."
   },
   "error": {
@@ -650,9 +634,12 @@
     "additionalCostsPerItem": "Additional costs (price per item)"
   },
   "errorMessages": {
-    "requiredField": "This filed is required.",
+    "requiredField": "This is a mandatory field.",
     "wholeNumber": "Enter a whole number.",
     "decimalNumber": "Enter a decimal number.",
+    "maxCharacters": "Enter a maximum of {max} characters.",
+    "missingOrWrongProperties": "The following fields are required or have been filled in incorrectly:",
+    "pleaseFillOutAllFields": "Please fill out all these fields.",
     "email": {
       "valid": "This field needs to be a valid email.",
       "required": "Email is required."
@@ -664,7 +651,33 @@
     "newsletter": {
       "firstNameRequired": "First Name is required.",
       "lastNameRequired": "Last Name is required.",
-      "termsRequired": "You must accept the terms and conditions."
+      "termsRequired": "You must accept the terms and conditions.",
+      "turnstileRequired": "Please check the box to verify that you are human."
     }
+  },
+  "returns": {
+    "detailsHeading": "Return Summary",
+    "return": "Return",
+    "returnNumber": "Return Number",
+    "selectQuantities": "Please select return quantities",
+    "selectReason": "Please select return reason",
+    "returnItems": "Return Items",
+    "areYouSure": "Are you sure you what to return these items?",
+    "commentOptional": "Comment(optional)",
+    "tellUsMore": "Tell us more about why you want to return these items...",
+    "initiateReturn":"Initiate Return",
+    "confirmReturn": "Confirm Return",
+    "cancel": "Cancel",
+    "orderDate": "Order date",
+    "returnReason": "Return reason",
+    "returnForOrder":"Return for order",
+    "selectReturnReason": "Select Return Reason",
+    "selectAll": "Select All",
+    "successConfirmationMessage": "We have registered your return request. We will keep you updated on the process.",
+    "quantity": "Quantity"
+  },
+  "productAttributes": {
+    "seeAvailableOptions": "See available options",
+    "notValidVariation": "Please select a valid variation."
   }
 }

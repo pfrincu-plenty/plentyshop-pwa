@@ -4,7 +4,7 @@
       <HeaderWithLink
         v-if="withHeader && title"
         :heading="title"
-        :label-desktop="$t('backToShopping')"
+        :label-desktop="$t('back')"
         :label-mobile="$t('back')"
       />
       <div v-if="products && products.length > 0" data-testid="wishlist-page-content">
@@ -21,7 +21,7 @@
                 :rating-count="productGetters.getTotalReviews(product)"
                 :rating="productGetters.getAverageRating(product)"
                 :price="actualPrice(product)"
-                :image-url="addWebpExtension(productGetters.getCoverImagePreview(product))"
+                :image-url="addWebpExtension(productGetters.getMiddleImage(product))"
                 :image-alt="productGetters.getName(product) ?? ''"
                 :slug="productGetters.getSlug(product) + `-${productGetters.getId(product)}`"
                 :priority="index === 0"
@@ -39,8 +39,16 @@
         </div>
       </div>
       <div v-else class="flex items-center justify-center flex-col pt-24 pb-32" data-testid="wishlist-page-content">
-        <NuxtImg src="/images/empty-cart.svg" :alt="$t('emptyCartImgAlt')" width="192" height="192" />
-        <h2 class="mt-8 typography-headline-3 font-bold">{{ $t('emptyWishlist') }}</h2>
+        <NuxtImg
+          data-testid="empty-wishlist-image"
+          src="/images/empty-cart.svg"
+          :alt="$t('emptyCartImgAlt')"
+          width="192"
+          height="192"
+        />
+        <h2 data-testid="empty-wishlist-text" class="mt-8 typography-headline-3 font-bold">
+          {{ $t('emptyWishlist') }}
+        </h2>
       </div>
     </div>
   </NarrowContainer>

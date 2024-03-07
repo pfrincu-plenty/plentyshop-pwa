@@ -215,7 +215,10 @@
   "products": "Produkte",
   "cart": "Warenkorb",
   "wishlist": "Wunschliste",
+  "addToWishlist": "Zur Wunschliste hinzufügen",
+  "removeFromWishlist": "Von Wunschliste entfernen",
   "addProductToWishlist": "{label} zur Wunschliste hinzufügen",
+  "removeProductFromWishlist": "{label} von der Wunschliste entfernen",
   "wishlistInteraction": {
     "delete": "Der Artikel wurde von der Wunschliste entfernt.",
     "add": "Der Artikel wurde der Wunschliste hinzugefügt."
@@ -292,36 +295,11 @@
       }
     }
   },
-  "contactOptions": {
-    "helpCenter": {
-      "label": "Hilfezentrum",
-      "details": {
-        "description": "Jederzeit online Antworten finden"
-      }
-    },
-    "liveChat": {
-      "label": "Live-Chat",
-      "details": {
-        "openingHours-1": "Mo–Fr, 5:00–22:00",
-        "openingHours-2": "Sa-So, 6:00–21:00"
-      }
-    },
-    "phone": {
-      "label": "1 234 567 8901",
-      "details": {
-        "openingHours-1": "Mo–Fr, 5:00–22:00",
-        "openingHours-2": "Sa-So, 6:00–21:00"
-      }
-    }
-  },
-  "bottomLinks": {
-    "terms": "AGB",
-    "privacyPolicy": "Datenschutzerklärung"
-  },
   "socialLabel": "Gehe zu {label}",
   "failedInfoHeader": "Es tut uns wirklich leid.",
   "failedInfoMessage": "Ihre Bestellung konnte nicht abgeschlossen werden.",
-  "successInfoHeader": "Vielen Dank!",
+  "successInfoOrderHeader": "Vielen Dank für Ihre Bestellung!",
+  "successInfoReturnHeader": "Vielen Dank für Ihre Retoure!",
   "successInfoMessage": "Ihre Bestellung wurde erfolgreich abgeschlossen.",
   "etaDelivery": "Voraussichtliche Lieferdauer",
   "shippingAddress": "Lieferadresse",
@@ -332,6 +310,7 @@
   "orderErrorMessage": "Etwas ging schief. Versuchen Sie es später noch einmal.",
   "orderErrorProvider": "Unbekannte Antwort des Zahlungsanbieters: {paymentType}",
   "orderNumber": "Auftrags-ID",
+  "returnNumber": "Rückgabe-ID",
   "productDetails": "Produkt-Details",
   "technicalData": "Technische Daten",
   "customerReviews": "Kundenrezensionen",
@@ -358,7 +337,8 @@
   },
   "account": {
     "heading": "Mein Konto",
-    "navBarBottomHeading": "Konto",
+    "navBottomHeadingAccount": "Konto",
+    "navBottomHeadingLogin": "Einloggen",
     "logout": "Ausloggen",
     "back": "Zurück",
     "accountSettings": {
@@ -399,7 +379,9 @@
     "ordersAndReturns": {
       "heading": "Bestellungen & Retouren",
       "orderId": "Auftrags-ID",
+      "returnId": "Retouren-ID",
       "orderDate": "Auftragsdatum",
+      "orderNumber": "Bestellnummer",
       "shippingDate": "Lieferdatum",
       "returnDate": "Retourendatum",
       "amount": "Anzahl",
@@ -407,6 +389,7 @@
       "details": "Details",
       "myOrders": "Meine Bestellungen",
       "noOrders": "Sie haben noch nicht bei uns eingekauft",
+      "noReturns": "Es sind noch keine Retouren vorhanden.",
       "continue": "Einkauf fortsetzen",
       "noOrdersAltText": "Keine Bestellungen",
       "returnsHeading": "Retouren",
@@ -571,6 +554,7 @@
     "remove": "Entfernen",
     "couponApplied": "Der Gutschein wurde erfolgreich eingelöst.",
     "couponRemoved": "Der Gutschein wurde erfolgreich entfernt.",
+    "pleaseProvideCoupon": "Bitte geben Sie einen gültigen Gutscheincode ein.",
     "couponInvalid": "Der Gutschein wurde bereits verwendet oder ist ungültig."
   },
   "error": {
@@ -653,6 +637,9 @@
     "requiredField": "Dieses Feld ist erforderlich.",
     "wholeNumber": "Geben Sie eine ganze Zahl ein.",
     "decimalNumber": "Geben Sie eine Kommazahl ein.",
+    "maxCharacters": "Geben Sie maximal {max} Zeichen ein.",
+    "missingOrWrongProperties": "Folgende Felder sind pflicht oder falsch gefüllt:",
+    "pleaseFillOutAllFields": "Bitte füllen Sie alle diese Felder aus.",
     "email": {
       "valid": "In diesem Feld muss es sich um eine gültige E-Mail-Adresse handeln.",
       "required": "E-Mail ist erforderlich."
@@ -664,7 +651,33 @@
     "newsletter": {
       "firstNameRequired": "Vorname ist erforderlich.",
       "lastNameRequired": "Nachname ist erforderlich.",
-      "termsRequired": "Bitte akzeptieren Sie die Datenschutzbestimmungen."
+      "termsRequired": "Bitte akzeptieren Sie die Datenschutzbestimmungen.",
+      "turnstileRequired": "Bitte aktivieren Sie die Checkbox, um zu bestätigen, dass Sie kein Bot sind."
     }
+  },
+  "returns": {
+    "detailsHeading": "Zusammenfassung der Rückgabe",
+    "return": "Retournieren",
+    "returnNumber": "Rücksendenummer",
+    "selectQuantities": "Bitte wählen Sie die Rücksendemengen aus",
+    "selectReason": "Bitte wählen Sie den Rückgabegrund aus",
+    "returnItems": "Rückgabe-Artikel",
+    "areYouSure": "Sind Sie sicher, dass Sie diese Artikel zurückgeben möchten?",
+    "commentOptional": "Kommentar (optional)",
+    "tellUsMore": "Erzählen Sie uns mehr darüber, warum Sie diese Artikel zurückgeben möchten..",
+    "initiateReturn": "Rückgabe einleiten",
+    "confirmReturn": "Rückgabe bestätigen",
+    "cancel": "Abbrechen",
+    "orderDate": "Auftragsdatum",
+    "returnReason": "Rücksendegrund",
+    "returnForOrder": "Zurück zur Bestellung",
+    "selectReturnReason": "Rücksendegrund auswählen",
+    "selectAll": "Alles auswählen",
+    "successConfirmationMessage": "Wir haben Ihre Retoure erfasst. Wir informieren Sie über den weiteren Ablauf.",
+    "quantity": "Anzahl"
+  },
+  "productAttributes": {
+    "seeAvailableOptions": "Verfügbare Optionen anzeigen",
+    "notValidVariation": "Bitte wählen Sie eine gültige Variante."
   }
 }

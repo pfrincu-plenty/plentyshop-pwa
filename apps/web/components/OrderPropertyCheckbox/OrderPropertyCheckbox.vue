@@ -42,14 +42,13 @@ import { productPropertyGetters } from '@plentymarkets/shop-sdk';
 import { OrderPropertyCheckboxProps } from './types';
 import { SfCheckbox } from '@storefront-ui/vue';
 import { useForm } from 'vee-validate';
-import { useValidatorAggregatorProperties } from '~/composables/useValidatorAggregator';
 import { object, boolean } from 'yup';
 
 const props = defineProps<OrderPropertyCheckboxProps>();
 const productProperty = props.productProperty;
 const hasTooltip = props.hasTooltip;
 const { t, n } = useI18n();
-const { registerValidator, registerInvalidFields } = useValidatorAggregatorProperties();
+const { registerValidator, registerInvalidFields } = useValidatorAggregator('properties');
 const { getPropertyById } = useProductOrderProperties();
 const property = getPropertyById(productProperty.property.id);
 const orderPropertyId = productPropertyGetters.getOrderPropertyId(productProperty);
@@ -79,7 +78,11 @@ watch(
   () => meta.value,
   () => {
     if (isOrderPropertyRequired) {
-      registerInvalidFields(meta.value.valid, `prop-${orderPropertyId}`);
+      registerInvalidFields(
+        meta.value.valid,
+        `prop-${orderPropertyId}`,
+        productPropertyGetters.getOrderPropertyName(productProperty),
+      );
     }
   },
 );

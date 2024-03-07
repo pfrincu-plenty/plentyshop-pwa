@@ -4,6 +4,7 @@
     data-testid="product-card"
   >
     <div class="relative">
+      <UiTags class="absolute m-2" :product="product" />
       <SfLink :tag="NuxtLink" rel="preload" :to="localePath(`${path}/${productSlug}`)" as="image">
         <NuxtImg
           :src="imageUrl"
@@ -36,6 +37,7 @@
           <SfCounter size="xs">{{ ratingCount }}</SfCounter>
         </SfLink>
       </div>
+
       <p class="block py-2 font-normal typography-text-xs text-neutral-700 text-justify">
         {{ description }}
       </p>
@@ -46,16 +48,16 @@
       <div class="flex items-center mt-auto">
         <span class="block pb-2 font-bold typography-text-sm" data-testid="product-card-vertical-price">
           <span v-if="!productGetters.canBeAddedToCartFromCategoryPage(product)" class="mr-1"
-            >{{ i18n.t('account.ordersAndReturns.orderDetails.priceFrom') }}
+            >{{ t('account.ordersAndReturns.orderDetails.priceFrom') }}
           </span>
-          <span>{{ i18n.n(cheapestPrice ?? mainPrice, 'currency') }}</span>
-          <span v-if="showNetPrices">{{ i18n.t('asterisk') }} </span>
+          <span>{{ n(cheapestPrice ?? mainPrice, 'currency') }}</span>
+          <span v-if="showNetPrices">{{ t('asterisk') }} </span>
         </span>
         <span
           v-if="oldPrice && oldPrice !== mainPrice"
           class="typography-text-sm text-neutral-500 line-through ml-3 pb-2"
         >
-          {{ i18n.n(oldPrice, 'currency') }}
+          {{ n(oldPrice, 'currency') }}
         </span>
       </div>
       <SfButton
@@ -71,11 +73,11 @@
         </template>
         <SfLoaderCircular v-if="loading" class="flex justify-center items-center" size="sm" />
         <span v-else>
-          {{ i18n.t('addToCartShort') }}
+          {{ t('addToCartShort') }}
         </span>
       </SfButton>
       <SfButton v-else type="button" :tag="NuxtLink" :to="localePath(`${path}/${productSlug}`)" size="sm" class="w-fit">
-        <span>{{ i18n.t('showArticle') }}</span>
+        <span>{{ t('showArticle') }}</span>
         <template #prefix>
           <SfIconChevronRight size="sm" />
         </template>
@@ -98,7 +100,7 @@ import {
 import type { ProductCardProps } from '~/components/ui/ProductCard/types';
 
 const localePath = useLocalePath();
-const i18n = useI18n();
+const { t, n } = useI18n();
 const { product } = withDefaults(defineProps<ProductCardProps>(), {
   lazy: true,
   imageAlt: '',
@@ -109,7 +111,6 @@ const { data: categoryTree } = useCategoryTree();
 
 const { addToCart } = useCart();
 const { send } = useNotification();
-const { t } = useI18n();
 const loading = ref(false);
 
 const runtimeConfig = useRuntimeConfig();
@@ -128,6 +129,7 @@ const addWithLoader = async (productId: number) => {
     loading.value = false;
   }
 };
+
 const mainPrice = computed(() => {
   const price = productGetters.getPrice(product);
   if (!price) return 0;

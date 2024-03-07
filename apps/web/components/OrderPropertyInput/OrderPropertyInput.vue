@@ -43,13 +43,12 @@ import { productPropertyGetters } from '@plentymarkets/shop-sdk';
 import { OrderPropertyInputProps } from './types';
 import { useForm } from 'vee-validate';
 import { object, string } from 'yup';
-import { useValidatorAggregatorProperties } from '~/composables/useValidatorAggregator';
 
 const props = defineProps<OrderPropertyInputProps>();
 const productProperty = props.productProperty;
 const hasTooltip = props.hasTooltip;
 const { t, n } = useI18n();
-const { registerValidator, registerInvalidFields } = useValidatorAggregatorProperties();
+const { registerValidator, registerInvalidFields } = useValidatorAggregator('properties');
 const orderPropertyId = productPropertyGetters.getOrderPropertyId(productProperty);
 const { getPropertyById } = useProductOrderProperties();
 const property = getPropertyById(orderPropertyId);
@@ -60,8 +59,12 @@ const isMultiline = productPropertyGetters.isMultiline(productProperty);
 const validationSchema = toTypedSchema(
   object({
     value: string().test((value, context) => {
-      if (isOrderPropertyRequired && value === '') {
+      if (isOrderPropertyRequired && !value) {
         return context.createError({ message: t('errorMessages.requiredField') });
+      }
+
+      if (value && value.length > 128) {
+        return context.createError({ message: t('errorMessages.maxCharacters', { max: 128 }) });
       }
 
       const isInt = productPropertyGetters.isOrderPropertyInt(productProperty);
@@ -91,7 +94,11 @@ const [value, valueAttributes] = defineField('value');
 watch(
   () => meta.value,
   () => {
-    registerInvalidFields(meta.value.valid, `prop-${orderPropertyId}`);
+    registerInvalidFields(
+      meta.value.valid,
+      `prop-${orderPropertyId}`,
+      productPropertyGetters.getOrderPropertyName(productProperty),
+    );
   },
 );
 
