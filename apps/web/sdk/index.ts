@@ -31,7 +31,6 @@ export const useSdk = () => {
   }
 
   interceptorIdResponse = client.interceptors.response.use((response) => {
-    console.log('response', response);
     if (response.config.baseURL?.includes('/plentysystems')) {
       if (process.server) {
         const cookie = useCookie('plentyID');
@@ -54,7 +53,6 @@ export const useSdk = () => {
   // This ensures that the session is established and other required cookies are sent to the server.
   interceptorIdRequest = client.interceptors.request.use(
     (config) => {
-      console.log('request', config);
       if (config.baseURL?.includes('/plentysystems')) {
         if (!config.headers) {
           config.headers = {} as AxiosRequestHeaders;
