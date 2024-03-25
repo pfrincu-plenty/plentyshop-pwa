@@ -25,8 +25,8 @@ import * as express from 'express';
   const allRequests = app._router.stack.find((layer: any) => layer.name.length > 0);
   if (allRequests) {
     allRequests.handle = (req: any, res: any, next: any) => {
-      console.log('request:', req.headers.host, req.originalUrl);
-      console.log(res);
+      consola.log('request:', req.headers.host, req.originalUrl);
+      consola.log(res);
       next();
     };
   }
