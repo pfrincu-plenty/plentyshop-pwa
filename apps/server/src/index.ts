@@ -26,6 +26,7 @@ import * as express from 'express';
   if (allRequests) {
     allRequests.handle = (req: any, res: any, next: any) => {
       console.log('request:', req.headers.host, req.originalUrl);
+      console.log(res);
       next();
     };
   }
