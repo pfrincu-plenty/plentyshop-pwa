@@ -55,36 +55,32 @@ const { fetchProductReviews } = useProductReviews(Number(productId));
 
 type FetchFunction = (args: any) => Promise<any>;
 
-async function fetchWithQueue(fetchFunction: FetchFunction, args: any, retryCount: number = 4): Promise<any> {
-  try {
-    let returnVal = await fetchFunction(args);
-    if(Object.keys(returnVal).length != 0){
-      return returnVal;
-    } else if(retryCount > 0) {
-      console.log(retryCount);
-      console.log("__________???????___________");
-      return fetchWithQueue(fetchFunction, args, retryCount - 1);
-    } else {
-      throw new Error('Maximale Anzahl von Versuchen erreicht, aber das Ergebnis ist immer noch leer');
-    }
-  } catch (error) {
-    console.error(error);
+async function fetchDataWithRetry(fetchFunction: FetchFunction, args: any, retryCount = 4) {
+  let data = await fetchFunction(args);
+  while (Object.keys(data).length === 0 && retryCount > 0) {
+    data = await fetchFunction(args);
+    retryCount--;
   }
+  if (Object.keys(data).length === 0) {
+    throw new Error('Maximale Anzahl von Versuchen erreicht, aber das Ergebnis ist immer noch leer');
+  }
+  return data;
 }
+
 
 
 if (process.server) {
   await Promise.all([
-    fetchWithQueue(fetchProduct, productParams),
-    fetchWithQueue(fetchProductReviewAverage, Number(productId)),
-    fetchWithQueue(fetchProductReviews, Number(productId)),
+    fetchDataWithRetry(fetchProduct, productParams),
+    fetchDataWithRetry(fetchProductReviewAverage, Number(productId)),
+    fetchDataWithRetry(fetchProductReviews, Number(productId)),
   ]).then( () => {
     setProductMetaData(product.value, categoryTree.value[0]);
   });
 } else {
   await Promise.all([
-    fetchWithQueue(fetchProduct, productParams),
-    fetchWithQueue(fetchProductReviewAverage, Number(productId))
+    fetchDataWithRetry(fetchProduct, productParams),
+    fetchDataWithRetry(fetchProductReviewAverage, Number(productId))
   ]);
 }
 
