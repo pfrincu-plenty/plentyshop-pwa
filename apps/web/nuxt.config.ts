@@ -171,6 +171,7 @@ export default defineNuxtConfig({
         path: '/:slug?/:slug_2?/:slug_3?/:slug_4?/:slug_5?/:slug_6?_:itemId',
         file: __dirname + '/pages/product/[slug].vue',
       });
+      console.log(pages);
     },
   },
   runtimeConfig: {
