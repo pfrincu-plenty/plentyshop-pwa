@@ -10,13 +10,19 @@
     <div class="px-4 pb-4 mt-3 md:px-6 md:pb-6 md:mt-0">
       <div v-if="orderPropertiesWithVatAdditionalCosts.length > 0" class="mb-4">
         <div
-          class="flex justify-between typography-text-base w-full"
+          class="flex gap-2 items-center typography-text-base w-full"
           v-for="property in orderPropertiesWithVatAdditionalCosts"
           :key="cartGetters.getBasketItemOrderParamPropertyId(property)"
         >
-          <p class="flex flex-col gap-2 grow pr-2">{{ cartGetters.getBasketItemOrderParamName(property) }}</p>
-          <p class="flex flex-col gap-2 text-right">
-            {{ n(cartGetters.getBasketItemOrderParamPrice(property), 'currency') }}
+          <p class="w-2/3 pr-2">
+            <UiSkeleton :loading="props.loading" >
+              {{ cartGetters.getBasketItemOrderParamName(property) }}
+            </UiSkeleton>
+          </p>
+          <p class="w-1/3 text-right">
+            <UiSkeleton :loading="props.loading" >
+              {{ n(cartGetters.getBasketItemOrderParamPrice(property), 'currency') }}
+            </UiSkeleton>
           </p>
         </div>
 
@@ -25,61 +31,66 @@
 
       <div class="flex gap-2 flex-col pb-4">
         <div class="w-full flex items-center">
-          <p class="w-1/2" data-testid="subtotal-label">{{ t('itemsSubtotal') }}</p>
-          <p class="w-1/2 font-medium text-right" data-testid="subtotal">
-            <UiSkeleton :loading="props.loading" classes="flex h-3 bg-gray-300 rounded">
+          <p class="w-2/3" data-testid="subtotal-label">{{ t('itemsSubtotal') }}</p>
+          <p class="w-1/3 font-medium text-right" data-testid="subtotal">
+            <UiSkeleton :loading="props.loading" >
               {{ n(totals.subTotal, 'currency') }}
             </UiSkeleton>
           </p>
         </div>
         <div class="w-full flex items-center">
-          <p class="w-1/2" data-testid="shipping-label">{{ t('delivery') }}</p>
-          <p class="w-1/2 font-medium text-right" data-testid="subtotal">
-            <UiSkeleton :loading="props.loading" classes="flex h-3 bg-gray-300 rounded">
+          <p class="w-2/3" data-testid="shipping-label">{{ t('delivery') }}</p>
+          <p class="w-1/3 font-medium text-right" data-testid="subtotal">
+            <UiSkeleton :loading="props.loading" classes="h-4">
               {{ getShippingAmount(cartGetters.getShippingPrice(props.cart)) }}
             </UiSkeleton>
           </p>
         </div>
 
         <div v-if="cartGetters.getCouponDiscount(props.cart)" class="w-full flex items-center">
-          <p class="w-1/2" data-testid="coupon-label">{{ t('coupon.name') }}</p>
-          <p class="w-1/2 font-medium text-right" data-testid="coupon-value">
-            <UiSkeleton :loading="props.loading" classes="flex h-3 bg-gray-300 rounded">
+          <p class="w-2/3" data-testid="coupon-label">{{ t('coupon.name') }}</p>
+          <p class="w-1/3 font-medium text-right" data-testid="coupon-value">
+            <UiSkeleton :loading="props.loading" classes="h-4">
               {{ n(cartGetters.getCouponDiscount(props.cart), 'currency') }}
             </UiSkeleton>
           </p>
         </div>
 
         <div v-for="(vat, index) in totals.vats" :key="index" class="w-full flex items-center">
-          <p class="w-1/2" data-testid="vat-label">{{ t('estimatedTax') }} {{ cartGetters.getTotalVatValue(vat) }}%</p>
-          <p class="w-1/2 text-right" data-testid="vat">
-            <UiSkeleton :loading="props.loading" classes="flex w-full h-4 bg-gray-300 rounded">
+          <p class="w-2/3" data-testid="vat-label">{{ t('estimatedTax') }} {{ cartGetters.getTotalVatValue(vat) }}%</p>
+          <p class="w-1/3 text-right" data-testid="vat">
+            <UiSkeleton :loading="props.loading" >
               {{ n(cartGetters.getTotalVatAmount(vat), 'currency') }}
             </UiSkeleton>
           </p>
         </div>
-
       </div>
 
       <div v-if="orderPropertiesWithoutVat.length > 0" class="mb-4">
         <UiDivider class="mb-4" />
         <div
-          class="flex justify-between typography-text-base w-full"
+          class="flex w-full typography-text-base gap-2 items-center"
           v-for="property in orderPropertiesWithoutVat"
           :key="cartGetters.getBasketItemOrderParamPropertyId(property)"
         >
-          <p class="flex flex-col gap-2 grow pr-2">{{ cartGetters.getBasketItemOrderParamName(property) }}</p>
-          <p class="flex flex-col gap-2 text-right">
-            {{ n(cartGetters.getBasketItemOrderParamPrice(property), 'currency') }}
+          <p class="w-2/3">
+            <UiSkeleton :loading="props.loading" >
+              {{ cartGetters.getBasketItemOrderParamName(property) }}
+            </UiSkeleton>
+          </p>
+          <p class="w-1/3 text-right">
+            <UiSkeleton :loading="props.loading" >
+              {{ n(cartGetters.getBasketItemOrderParamPrice(property), 'currency') }}
+            </UiSkeleton>
           </p>
         </div>
         <UiDivider class="mt-4 w-auto" />
       </div>
 
-      <div class="flex justify-between typography-headline-4 md:typography-headline-3 font-bold pb-4 mb-4">
-        <p data-testid="total-label">{{ t('total') }}</p>
-        <p data-testid="total" class="w-1/2 flex justify-end space-x-4">
-          <UiSkeleton :loading="props.loading" classes="w-1/2 bg-gray-300 rounded">
+      <div class="flex w-full items-center typography-headline-4 md:typography-headline-3 font-bold pb-4 mb-4">
+        <p class="w-2/3" data-testid="total-label">{{ t('total') }}</p>
+        <p class="w-1/3 text-right" data-testid="total" >
+          <UiSkeleton :loading="props.loading" classes="leading-7 h-5">
             {{ n(totals.total, 'currency') }}
           </UiSkeleton>
         </p>

@@ -1,5 +1,5 @@
 export type SkeletonProps = {
-    classes: string;
+    classes?: string;
     loading: boolean;
   };
   
