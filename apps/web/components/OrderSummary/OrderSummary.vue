@@ -14,7 +14,7 @@
           v-for="property in orderPropertiesWithVatAdditionalCosts"
           :key="cartGetters.getBasketItemOrderParamPropertyId(property)"
         >
-          <p class="w-2/3 pr-2">
+          <p class="w-2/3">
             <UiSkeleton :loading="props.loading" >
               {{ cartGetters.getBasketItemOrderParamName(property) }}
             </UiSkeleton>

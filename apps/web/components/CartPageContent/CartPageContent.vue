@@ -30,7 +30,7 @@
 </template>
 
 <script setup lang="ts">
-import { SfButton, SfLoaderCircular } from '@storefront-ui/vue';
+import { SfButton } from '@storefront-ui/vue';
 import { useCart } from '~/composables';
 const viewport = useViewport();
 const localePath = useLocalePath();
