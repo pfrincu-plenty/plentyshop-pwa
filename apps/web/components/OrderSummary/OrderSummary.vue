@@ -23,39 +23,7 @@
         <UiDivider class="mt-4 w-auto" />
       </div>
 
-      <div class="flex justify-between typography-text-base pb-4">
-        <div class="flex flex-col gap-2 grow pr-2">
-          <p data-testid="subtotal-label">{{ t('itemsSubtotal') }}</p>
-          <p data-testid="shipping-label">{{ t('delivery') }}</p>
-          <p v-if="cartGetters.getCouponDiscount(props.cart)" data-testid="coupon-label">{{ t('coupon.name') }}</p>
-          <p v-for="(vat, index) in totals.vats" :key="index" data-testid="vat-label">
-            {{ t('estimatedTax') }} {{ cartGetters.getTotalVatValue(vat) }}%
-          </p>
-        </div>
-        <div class="flex flex-col gap-2 text-right">
-          <p data-testid="subtotal" class="font-medium">
-            <UiSkeleton :loading="true" classes="flex h-4 bg-gray-300 rounded">
-              {{ n(totals.subTotal, 'currency') }}
-            </UiSkeleton>
-          </p>
-
-          <p data-testid="shipping" class="font-medium">
-            <UiSkeleton :loading="true" classes="flex h-4 bg-gray-300 rounded">
-              {{ getShippingAmount(cartGetters.getShippingPrice(props.cart)) }}
-            </UiSkeleton>
-          </p>
-          <p v-if="cartGetters.getCouponDiscount(props.cart)" class="font-medium" data-testid="coupon-value">
-            {{ n(cartGetters.getCouponDiscount(props.cart), 'currency') }}
-          </p>
-          <p v-for="(vat, index) in totals.vats" :key="index" data-testid="vat">
-            <UiSkeleton :loading="true" classes="flex w-full h-4 bg-gray-300 rounded">
-              {{ n(cartGetters.getTotalVatAmount(vat), 'currency') }}
-            </UiSkeleton>
-          </p>
-        </div>
-      </div>
-
-      <div>
+      <div class="flex gap-2 flex-col pb-4">
         <div class="w-full flex items-center">
           <p class="w-1/2" data-testid="subtotal-label">{{ t('itemsSubtotal') }}</p>
           <p class="w-1/2 font-medium text-right" data-testid="subtotal">
