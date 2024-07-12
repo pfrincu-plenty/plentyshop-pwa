@@ -15,8 +15,6 @@ jobs:
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
-        with:
-          ref: ${{ github.event.release.tag_name }} || ${{ inputs.tag-version }}
 
       - name: Compress repo to Tar
         uses: a7ul/tar-action@v1.1.0
