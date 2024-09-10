@@ -132,10 +132,17 @@ const createButton = () => {
 
 const bindUuid = async () => (paypalUuid.value = uuid());
 
-onMounted(async () => await bindUuid().then(() => createButton()));
+onMounted(() => bindUuid().then(() => createButton()));
 
-watch(currency, async () => {
-  paypalScript.value = await loadScript(currency.value, isCommit);
-  createButton();
+watch(currency, () => {
+  loadScript(currency.value, isCommit)
+    // eslint-disable-next-line promise/always-return
+    .then((script) => {
+      paypalScript.value = script;
+      createButton();
+    })
+    .catch(() => {
+      paypalScript.value = null;
+    });
 });
 </script>
