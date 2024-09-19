@@ -152,7 +152,7 @@ async function onGooglePaymentButtonClicked() {
 
 async function processPayment(paymentData: google.payments.api.PaymentData) {
   try {
-    const transaction = await createTransaction('paypal');
+    const transaction = await createTransaction('googlepay');
     if (!transaction || !transaction.id) throw new Error('Transaction creation failed.');
     const order = await createOrder({
       paymentId: cart.value.methodOfPaymentId,
