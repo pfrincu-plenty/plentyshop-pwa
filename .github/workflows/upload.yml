@@ -88,6 +88,6 @@ jobs:
         id: upload
         uses: JantHsueh/upload-file-action@1.0
         with:
-          url: 'https://pwapublish.114.plenty.rocks'
+          url: 'https://pwapublish.plentysystems.com'
           forms: '{ "token": "${{ secrets.URL_ENDPOINT_TOKEN }}" }'
           fileForms: '{ "file": "pwa.tar.gz" }'
