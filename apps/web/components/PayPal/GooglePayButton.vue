@@ -68,7 +68,7 @@ async function getGooglePaymentDataRequest() {
   paymentDataRequest.allowedPaymentMethods = allowedPaymentMethods;
   paymentDataRequest.transactionInfo = getGoogleTransactionInfo();
   paymentDataRequest.merchantInfo = merchantInfo;
-  paymentDataRequest.callbackIntents = ['PAYMENT_AUTHORIZATION'];
+  // paymentDataRequest.callbackIntents = ['PAYMENT_AUTHORIZATION'];
   (paymentDataRequest as any).payment_source = {
     google_pay: {
       attributes: {
@@ -78,7 +78,6 @@ async function getGooglePaymentDataRequest() {
       },
     },
   };
-  console.log('paymentdata', paymentDataRequest);
   return paymentDataRequest;
 }
 
@@ -108,9 +107,9 @@ function getGooglePaymentsClient() {
   if (paymentsClient === null) {
     paymentsClient = new google.payments.api.PaymentsClient({
       environment: 'TEST',
-      paymentDataCallbacks: {
-        onPaymentAuthorized: onPaymentAuthorized,
-      },
+      // paymentDataCallbacks: {
+      //   onPaymentAuthorized: onPaymentAuthorized,
+      // },
     });
   }
   return paymentsClient;
@@ -150,12 +149,29 @@ function getGoogleTransactionInfo() {
   };
 }
 
+// async function onGooglePaymentButtonClicked() {
+//   emits('button-clicked', async (successfully) => {
+//     if (successfully) {
+//       const paymentDataRequest = await getGooglePaymentDataRequest();
+//       const paymentsClient = getGooglePaymentsClient();
+//       paymentsClient.loadPaymentData(paymentDataRequest);
+//     }
+//   });
+// }
 async function onGooglePaymentButtonClicked() {
   emits('button-clicked', async (successfully) => {
     if (successfully) {
       const paymentDataRequest = await getGooglePaymentDataRequest();
       const paymentsClient = getGooglePaymentsClient();
-      paymentsClient.loadPaymentData(paymentDataRequest);
+      paymentsClient
+        .loadPaymentData(paymentDataRequest)
+        .then(function (paymentData) {
+          processPayment(paymentData);
+        })
+        .catch(function (error) {
+          // show error in developer console for debugging
+          console.error(error);
+        });
     }
   });
 }
