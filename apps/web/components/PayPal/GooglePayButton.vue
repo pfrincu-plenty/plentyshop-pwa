@@ -65,19 +65,20 @@ async function getGooglePaymentDataRequest() {
     callbackIntents,
   };
   const paymentDataRequest = Object.assign({}, baseRequest);
+  // Enforce 3DS by adding cardOptions to allowedPaymentMethods
+  paymentDataRequest.allowedPaymentMethods = allowedPaymentMethods.map((method: any) => {
+    if (method.type === 'CARD') {
+      method.parameters.cardOptions = {
+        assuranceDetailsRequired: true, // Ensure 3DS
+        challenge: 'sca_always', // Enforce SCA (Strong Customer Authentication)
+      };
+    }
+    return method;
+  });
   paymentDataRequest.allowedPaymentMethods = allowedPaymentMethods;
   paymentDataRequest.transactionInfo = getGoogleTransactionInfo();
   paymentDataRequest.merchantInfo = merchantInfo;
   // paymentDataRequest.callbackIntents = ['PAYMENT_AUTHORIZATION'];
-  // (paymentDataRequest as any).payment_source = {
-  //   google_pay: {
-  //     attributes: {
-  //       verification: {
-  //         method: 'SCA_ALWAYS',
-  //       },
-  //     },
-  //   },
-  // };
   return paymentDataRequest;
 }
 
@@ -197,7 +198,7 @@ async function processPayment(paymentData: google.payments.api.PaymentData) {
     if (!order || !order.order || !order.order.id) throw new Error('Order creation failed.');
 
     const { status } = await (paypal as any).Googlepay().confirmOrder({
-      orderId: transaction.id,
+      orderId: order.order.id,
       paymentMethodData: paymentData.paymentMethodData,
     });
 
