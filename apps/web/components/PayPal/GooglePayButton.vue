@@ -69,6 +69,15 @@ async function getGooglePaymentDataRequest() {
   paymentDataRequest.transactionInfo = getGoogleTransactionInfo();
   paymentDataRequest.merchantInfo = merchantInfo;
   paymentDataRequest.callbackIntents = ['PAYMENT_AUTHORIZATION'];
+  (paymentDataRequest as any).payment_source = {
+    google_pay: {
+      attributes: {
+        verification: {
+          method: 'SCA_ALWAYS',
+        },
+      },
+    },
+  };
   return paymentDataRequest;
 }
 
