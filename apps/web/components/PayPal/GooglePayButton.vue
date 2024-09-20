@@ -55,6 +55,11 @@ async function getGooglePaymentDataRequest() {
     transactionInfo,
     callbackIntents,
   } = await getGooglePayConfig();
+  allowedPaymentMethods.forEach((method: any) => {
+    method.parameters.cardOptions = method.parameters.cardOptions || {};
+    method.parameters.cardOptions.assuranceDetailsRequired = true;
+    method.parameters.cardOptions.challenge = 'sca_always';
+  });
   countryCodeString = countryCode;
   const baseRequest = {
     apiVersion,
@@ -68,16 +73,7 @@ async function getGooglePaymentDataRequest() {
   paymentDataRequest.allowedPaymentMethods = allowedPaymentMethods;
   paymentDataRequest.transactionInfo = getGoogleTransactionInfo();
   paymentDataRequest.merchantInfo = merchantInfo;
-  // paymentDataRequest.callbackIntents = ['PAYMENT_AUTHORIZATION'];
-  // (paymentDataRequest as any).payment_source = {
-  //   google_pay: {
-  //     attributes: {
-  //       verification: {
-  //         method: 'SCA_ALWAYS',
-  //       },
-  //     },
-  //   },
-  // };
+
   return paymentDataRequest;
 }
 
@@ -176,6 +172,7 @@ async function onGooglePaymentButtonClicked() {
       const paymentsClient = getGooglePaymentsClient();
       paymentsClient
         .loadPaymentData(paymentDataRequest)
+        // eslint-disable-next-line promise/always-return
         .then((paymentData: any) => {
           processPayment(paymentData);
         })
