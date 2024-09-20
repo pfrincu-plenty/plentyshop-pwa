@@ -55,14 +55,6 @@ async function getGooglePaymentDataRequest() {
     transactionInfo,
     callbackIntents,
   } = await getGooglePayConfig();
-  allowedPaymentMethods.forEach((method: any) => {
-    method.parameters = method.parameters || {};
-    if (method.type === 'CARD') {
-      method.parameters.cardOptions = method.parameters.cardOptions || {};
-      method.parameters.cardOptions.assuranceDetailsRequired = true; // Ensure 3DS
-      method.parameters.cardOptions.challenge = 'sca_always'; // Enforce SCA Always
-    }
-  });
   countryCodeString = countryCode;
   const baseRequest = {
     apiVersion,
@@ -188,7 +180,7 @@ async function onGooglePaymentButtonClicked() {
 
 async function processPayment(paymentData: google.payments.api.PaymentData) {
   try {
-    const transaction = await createTransaction('paypal');
+    const transaction = await createTransaction('googlepay');
     if (!transaction || !transaction.id) throw new Error('Transaction creation failed.');
     const order = await createOrder({
       paymentId: cart.value.methodOfPaymentId,
@@ -213,14 +205,14 @@ async function processPayment(paymentData: google.payments.api.PaymentData) {
             paypalPayerId: data.paypalPayerId,
           });
           await executeOrder({
-            mode: 'paypal',
+            mode: 'googlepay',
             plentyOrderId: Number.parseInt(orderGetters.getId(order)),
             paypalTransactionId: data.orderID,
           });
         });
     } else {
       await executeOrder({
-        mode: 'paypal',
+        mode: 'googlepay',
         plentyOrderId: Number.parseInt(orderGetters.getId(order)),
         paypalTransactionId: transaction.id,
       });
