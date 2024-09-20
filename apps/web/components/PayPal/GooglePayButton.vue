@@ -78,6 +78,7 @@ async function getGooglePaymentDataRequest() {
       },
     },
   };
+  console.log('paymentdata', paymentDataRequest);
   return paymentDataRequest;
 }
 
