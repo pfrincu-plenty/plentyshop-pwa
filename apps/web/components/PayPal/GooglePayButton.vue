@@ -182,11 +182,6 @@ async function processPayment(paymentData: google.payments.api.PaymentData) {
   try {
     const transaction = await createTransaction('googlepay');
     if (!transaction || !transaction.id) throw new Error('Transaction creation failed.');
-    const order = await createOrder({
-      paymentId: cart.value.methodOfPaymentId,
-      shippingPrivacyHintAccepted: shippingPrivacyAgreement.value,
-    });
-    if (!order || !order.order || !order.order.id) throw new Error('Order creation failed.');
 
     const { status } = await (paypal as any).Googlepay().confirmOrder({
       orderId: transaction.id,
@@ -194,6 +189,11 @@ async function processPayment(paymentData: google.payments.api.PaymentData) {
     });
 
     if (status === 'PAYER_ACTION_REQUIRED') {
+      const order = await createOrder({
+        paymentId: cart.value.methodOfPaymentId,
+        shippingPrivacyHintAccepted: shippingPrivacyAgreement.value,
+      });
+      if (!order || !order.order || !order.order.id) throw new Error('Order creation failed.');
       // eslint-disable-next-line promise/catch-or-return
       (paypal as any)
         .Googlepay()
@@ -210,15 +210,22 @@ async function processPayment(paymentData: google.payments.api.PaymentData) {
             paypalTransactionId: data.orderID,
           });
         });
+      clearCartItems();
+      navigateTo(localePath(paths.confirmation + '/' + order.order.id + '/' + order.order.accessKey));
     } else {
+      const order = await createOrder({
+        paymentId: cart.value.methodOfPaymentId,
+        shippingPrivacyHintAccepted: shippingPrivacyAgreement.value,
+      });
+      if (!order || !order.order || !order.order.id) throw new Error('Order creation failed.');
       await executeOrder({
         mode: 'googlepay',
         plentyOrderId: Number.parseInt(orderGetters.getId(order)),
         paypalTransactionId: transaction.id,
       });
+      clearCartItems();
+      navigateTo(localePath(paths.confirmation + '/' + order.order.id + '/' + order.order.accessKey));
     }
-    clearCartItems();
-    navigateTo(localePath(paths.confirmation + '/' + order.order.id + '/' + order.order.accessKey));
 
     return { transactionState: 'SUCCESS' };
   } catch (error: unknown) {
