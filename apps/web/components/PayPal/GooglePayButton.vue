@@ -69,15 +69,15 @@ async function getGooglePaymentDataRequest() {
   paymentDataRequest.transactionInfo = getGoogleTransactionInfo();
   paymentDataRequest.merchantInfo = merchantInfo;
   // paymentDataRequest.callbackIntents = ['PAYMENT_AUTHORIZATION'];
-  (paymentDataRequest as any).payment_source = {
-    google_pay: {
-      attributes: {
-        verification: {
-          method: 'SCA_ALWAYS',
-        },
-      },
-    },
-  };
+  // (paymentDataRequest as any).payment_source = {
+  //   google_pay: {
+  //     attributes: {
+  //       verification: {
+  //         method: 'SCA_ALWAYS',
+  //       },
+  //     },
+  //   },
+  // };
   return paymentDataRequest;
 }
 
@@ -174,10 +174,14 @@ async function onGooglePaymentButtonClicked() {
     if (successfully) {
       const paymentDataRequest = await getGooglePaymentDataRequest();
       const paymentsClient = getGooglePaymentsClient();
-      // eslint-disable-next-line promise/catch-or-return,promise/always-return
-      paymentsClient.loadPaymentData(paymentDataRequest).then((paymentData) => {
-        processPayment(paymentData);
-      });
+      paymentsClient
+        .loadPaymentData(paymentDataRequest)
+        .then((paymentData: any) => {
+          processPayment(paymentData);
+        })
+        .catch((error) => {
+          console.error(error);
+        });
     }
   });
 }
