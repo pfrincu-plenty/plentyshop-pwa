@@ -69,6 +69,15 @@ async function getGooglePaymentDataRequest() {
   paymentDataRequest.transactionInfo = getGoogleTransactionInfo();
   paymentDataRequest.merchantInfo = merchantInfo;
   // paymentDataRequest.callbackIntents = ['PAYMENT_AUTHORIZATION'];
+  // (paymentDataRequest as any).payment_source = {
+  //   google_pay: {
+  //     attributes: {
+  //       verification: {
+  //         method: 'SCA_ALWAYS',
+  //       },
+  //     },
+  //   },
+  // };
   return paymentDataRequest;
 }
 
@@ -179,7 +188,7 @@ async function onGooglePaymentButtonClicked() {
 
 async function processPayment(paymentData: google.payments.api.PaymentData) {
   try {
-    const transaction = await createTransaction('googlepay');
+    const transaction = await createTransaction('paypal');
     if (!transaction || !transaction.id) throw new Error('Transaction creation failed.');
     const order = await createOrder({
       paymentId: cart.value.methodOfPaymentId,
@@ -188,7 +197,7 @@ async function processPayment(paymentData: google.payments.api.PaymentData) {
     if (!order || !order.order || !order.order.id) throw new Error('Order creation failed.');
 
     const { status } = await (paypal as any).Googlepay().confirmOrder({
-      orderId: order.order.id.toString(),
+      orderId: transaction.id,
       paymentMethodData: paymentData.paymentMethodData,
     });
 
