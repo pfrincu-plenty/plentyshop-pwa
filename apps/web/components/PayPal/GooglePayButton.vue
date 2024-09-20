@@ -188,7 +188,7 @@ async function processPayment(paymentData: google.payments.api.PaymentData) {
     if (!order || !order.order || !order.order.id) throw new Error('Order creation failed.');
 
     const { status } = await (paypal as any).Googlepay().confirmOrder({
-      orderId: order.order.id,
+      orderId: order.order.id.toString(),
       paymentMethodData: paymentData.paymentMethodData,
     });
 
