@@ -165,6 +165,7 @@ async function onGooglePaymentButtonClicked() {
       const paymentsClient = getGooglePaymentsClient();
       paymentsClient
         .loadPaymentData(paymentDataRequest)
+        // eslint-disable-next-line promise/always-return
         .then(function (paymentData) {
           processPayment(paymentData);
         })
