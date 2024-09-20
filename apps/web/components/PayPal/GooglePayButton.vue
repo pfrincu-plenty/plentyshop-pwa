@@ -103,13 +103,24 @@ function onPaymentAuthorized(
   });
 }
 
+/*
 function getGooglePaymentsClient() {
   if (paymentsClient === null) {
     paymentsClient = new google.payments.api.PaymentsClient({
       environment: 'TEST',
-      // paymentDataCallbacks: {
-      //   onPaymentAuthorized: onPaymentAuthorized,
-      // },
+      paymentDataCallbacks: {
+        onPaymentAuthorized: onPaymentAuthorized,
+      },
+    });
+  }
+  return paymentsClient;
+}
+*/
+
+function getGooglePaymentsClient() {
+  if (paymentsClient === null) {
+    paymentsClient = new google.payments.api.PaymentsClient({
+      environment: 'TEST',
     });
   }
   return paymentsClient;
@@ -163,16 +174,9 @@ async function onGooglePaymentButtonClicked() {
     if (successfully) {
       const paymentDataRequest = await getGooglePaymentDataRequest();
       const paymentsClient = getGooglePaymentsClient();
-      paymentsClient
-        .loadPaymentData(paymentDataRequest)
-        // eslint-disable-next-line promise/always-return
-        .then(function (paymentData) {
-          processPayment(paymentData);
-        })
-        .catch(function (error) {
-          // show error in developer console for debugging
-          console.error(error);
-        });
+      paymentsClient.loadPaymentData(paymentDataRequest).then((paymentData) => {
+        processPayment(paymentData);
+      });
     }
   });
 }
