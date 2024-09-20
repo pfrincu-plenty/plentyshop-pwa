@@ -65,16 +65,6 @@ async function getGooglePaymentDataRequest() {
     callbackIntents,
   };
   const paymentDataRequest = Object.assign({}, baseRequest);
-  // Enforce 3DS by adding cardOptions to allowedPaymentMethods
-  paymentDataRequest.allowedPaymentMethods = allowedPaymentMethods.map((method: any) => {
-    if (method.type === 'CARD') {
-      method.parameters.cardOptions = {
-        assuranceDetailsRequired: true, // Ensure 3DS
-        challenge: 'sca_always', // Enforce SCA (Strong Customer Authentication)
-      };
-    }
-    return method;
-  });
   paymentDataRequest.allowedPaymentMethods = allowedPaymentMethods;
   paymentDataRequest.transactionInfo = getGoogleTransactionInfo();
   paymentDataRequest.merchantInfo = merchantInfo;
