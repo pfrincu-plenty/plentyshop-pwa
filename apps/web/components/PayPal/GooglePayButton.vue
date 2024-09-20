@@ -56,9 +56,12 @@ async function getGooglePaymentDataRequest() {
     callbackIntents,
   } = await getGooglePayConfig();
   allowedPaymentMethods.forEach((method: any) => {
-    method.parameters.cardOptions = method.parameters.cardOptions || {};
-    method.parameters.cardOptions.assuranceDetailsRequired = true;
-    method.parameters.cardOptions.challenge = 'sca_always';
+    method.parameters = method.parameters || {};
+    if (method.type === 'CARD') {
+      method.parameters.cardOptions = method.parameters.cardOptions || {};
+      method.parameters.cardOptions.assuranceDetailsRequired = true; // Ensure 3DS
+      method.parameters.cardOptions.challenge = 'sca_always'; // Enforce SCA Always
+    }
   });
   countryCodeString = countryCode;
   const baseRequest = {
