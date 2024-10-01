@@ -839,5 +839,8 @@
     "subTotal": "Items subtotal",
     "checkYourCart": "Check your cart",
     "cartContains": "Your cart contains {count} item | Your cart contains {count} items"
+  },
+  "emailConfirmation": {
+    "newsletterOptInMessage": "Your email address has been confirmed."
   }
 }

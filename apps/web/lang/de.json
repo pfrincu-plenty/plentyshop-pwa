@@ -839,5 +839,8 @@
     "subTotal": "Zwischensumme",
     "checkYourCart": "Warenkorb prüfen",
     "cartContains": "Ihr Warenkorb enthält {count} Artikel"
+  },
+  "emailConfirmation": {
+    "newsletterOptInMessage": "Ihre E-Mail-Adresse wurde bestätigt."
   }
 }
