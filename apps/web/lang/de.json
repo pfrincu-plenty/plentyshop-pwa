@@ -841,6 +841,7 @@
     "cartContains": "Ihr Warenkorb enthält {count} Artikel"
   },
   "emailConfirmation": {
-    "newsletterOptInMessage": "Ihre E-Mail-Adresse wurde bestätigt."
+    "newsletterOptInMessage": "Ihre E-Mail-Adresse wurde bestätigt.",
+    "newsletterOptInMessageError": "Beim Bestätigen Ihrer E-Mail ist ein Fehler aufgetreten."
   }
 }

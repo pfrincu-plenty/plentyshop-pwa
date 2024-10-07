@@ -841,6 +841,7 @@
     "cartContains": "Your cart contains {count} item | Your cart contains {count} items"
   },
   "emailConfirmation": {
-    "newsletterOptInMessage": "Your email address has been confirmed."
+    "newsletterOptInMessage": "Your email address has been confirmed.",
+    "newsletterOptInMessageError": "There was an error on confirming your email."
   }
 }
