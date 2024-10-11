@@ -62,14 +62,11 @@
           <span v-if="!productGetters.canBeAddedToCartFromCategoryPage(product)" class="mr-1">
             {{ t('account.ordersAndReturns.orderDetails.priceFrom') }}
           </span>
-          <span>{{ n(cheapestPrice ?? mainPrice, 'currency') }}</span>
+          <span>{{ n(price, 'currency') }}</span>
           <span v-if="showNetPrices">{{ t('asterisk') }} </span>
         </span>
-        <span
-          v-if="oldPrice && oldPrice !== mainPrice"
-          class="typography-text-sm text-neutral-500 line-through md:ml-3 md:pb-2"
-        >
-          {{ n(oldPrice, 'currency') }}
+        <span v-if="crossedPrice" class="typography-text-sm text-neutral-500 line-through md:ml-3 md:pb-2">
+          {{ n(crossedPrice, 'currency') }}
         </span>
       </div>
       <UiButton
@@ -96,7 +93,7 @@
 </template>
 
 <script setup lang="ts">
-import { CategoryTreeItem, productGetters } from '@plentymarkets/shop-api';
+import { productGetters } from '@plentymarkets/shop-api';
 import { SfLink, SfIconShoppingCart, SfLoaderCircular, SfRating, SfCounter } from '@storefront-ui/vue';
 import type { ProductCardProps } from '~/components/ui/ProductCard/types';
 
@@ -106,42 +103,35 @@ const {
   product,
   name,
   imageUrl,
-  imageAlt,
+  imageAlt = '',
   imageTitle,
   imageWidth,
   imageHeight,
   rating,
   ratingCount,
   priority,
-  lazy,
+  lazy = true,
   unitContent,
   unitName,
   basePrice,
   showBasePrice,
-  isFromWishlist,
-  isFromSlider,
-} = withDefaults(defineProps<ProductCardProps>(), {
-  lazy: true,
-  imageAlt: '',
-  isFromWishlist: false,
-  isFromSlider: false,
-});
+  isFromWishlist = false,
+  isFromSlider = false,
+} = defineProps<ProductCardProps>();
 
 const { data: categoryTree } = useCategoryTree();
 const { openQuickCheckout } = useQuickCheckout();
 const { addToCart } = useCart();
 const { send } = useNotification();
+const { price, crossedPrice } = useProductPrice(product);
+
 const loading = ref(false);
 const runtimeConfig = useRuntimeConfig();
 const showNetPrices = runtimeConfig.public.showNetPrices;
-const productPath = ref('');
-const setProductPath = (categoriesTree: CategoryTreeItem[]) => {
-  const path = productGetters.getCategoryUrlPath(product, categoriesTree);
-  const productSlug = productGetters.getSlug(product) + `_${productGetters.getItemId(product)}`;
-  productPath.value = localePath(`${path}/${productSlug}`);
-};
 
-setProductPath(categoryTree.value);
+const path = computed(() => productGetters.getCategoryUrlPath(product, categoryTree.value));
+const productSlug = computed(() => productGetters.getSlug(product) + `_${productGetters.getItemId(product)}`);
+const productPath = computed(() => localePath(`${path.value}/${productSlug.value}`));
 
 const addWithLoader = async (productId: number) => {
   loading.value = true;
@@ -159,22 +149,5 @@ const addWithLoader = async (productId: number) => {
   }
 };
 
-const mainPrice = computed(() => {
-  const price = productGetters.getPrice(product);
-  if (!price) return 0;
-
-  if (price.special) return price.special;
-  if (price.regular) return price.regular;
-
-  return 0;
-});
-
-const cheapestPrice = productGetters.getCheapestGraduatedPrice(product);
-const oldPrice = productGetters.getRegularPrice(product);
 const NuxtLink = resolveComponent('NuxtLink');
-
-watch(
-  () => categoryTree.value,
-  (categoriesTree) => setProductPath(categoriesTree),
-);
 </script>
