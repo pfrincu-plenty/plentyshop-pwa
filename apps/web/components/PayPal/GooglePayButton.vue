@@ -13,12 +13,12 @@ import { cartGetters, orderGetters } from '@plentymarkets/shop-api';
 
 let isGooglePayLoaded = true;
 let countryCodeString = '';
-const { loadScript, executeOrder, createTransaction, captureOrder } = usePayPal();
+const { getScript, executeOrder, createTransaction, captureOrder } = usePayPal();
 const { shippingPrivacyAgreement } = useAdditionalInformation();
 const { createOrder } = useMakeOrder();
 const { data: cart, clearCartItems } = useCart();
 const currency = computed(() => cartGetters.getCurrency(cart.value) || (useAppConfig().fallbackCurrency as string));
-const paypal = await loadScript(currency.value);
+const paypal = await getScript(currency.value);
 const localePath = useLocalePath();
 const emits = defineEmits<{
   (event: 'button-clicked', callback: PayPalAddToCartCallback): Promise<void>;

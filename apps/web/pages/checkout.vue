@@ -79,7 +79,6 @@
               <template v-else>{{ $t('buy') }}</template>
             </UiButton>
             <PayPalApplePayButton
-              v-if="applePayAvailable"
               :style="createOrderLoading || disableShippingPayment || cartLoading ? 'pointer-events: none;' : ''"
               @button-clicked="validateTerms"
             />

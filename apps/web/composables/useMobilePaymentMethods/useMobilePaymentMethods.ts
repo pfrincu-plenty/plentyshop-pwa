@@ -40,25 +40,27 @@ async function checkGooglePayEligibility(): Promise<boolean> {
   if (typeof window === 'undefined' || typeof google === 'undefined' || !google.payments) return false; // Ensure running in a browser environment
 
   const googlePayClient = new google.payments.api.PaymentsClient({
-    environment: 'PRODUCTION', // or 'TEST' depending on your environment
+    environment: 'TEST', // or 'TEST' depending on your environment
   });
 
-  const googlePayRequest = {
+  type PaymentMethodType = 'CARD' | 'PAYPAL'; // Adjust according to the actual definition
+
+  const isReadyToPayRequest: google.payments.api.IsReadyToPayRequest = {
     apiVersion: 2,
     apiVersionMinor: 0,
     allowedPaymentMethods: [
       {
-        type: 'CARD',
+        type: 'CARD', // Ensure this matches `PaymentMethodType`
         parameters: {
-          allowedAuthMethods: ['PAN_ONLY', 'CRYPTOGRAM_3DS'],
-          allowedCardNetworks: ['MASTERCARD', 'VISA'],
+          allowedAuthMethods: ['PAN_ONLY', 'CRYPTOGRAM_3DS'], // Adjust as needed
+          allowedCardNetworks: ['AMEX', 'MASTERCARD', 'VISA'], // Adjust card networks
         },
       },
     ],
   };
 
   try {
-    const result = await googlePayClient.isReadyToPay(googlePayRequest);
+    const result = await googlePayClient.isReadyToPay(isReadyToPayRequest);
     return result.result; // true if eligible, false otherwise
   } catch (error) {
     console.error('Error checking Google Pay eligibility:', error);
@@ -68,15 +70,14 @@ async function checkGooglePayEligibility(): Promise<boolean> {
 
 // Check if Apple Pay is available
 function checkApplePayEligibility(): boolean {
-  if (typeof window === 'undefined') return false; // Ensure running in a browser environment
-  return window.ApplePaySession && ApplePaySession.canMakePayments();
+  return typeof ApplePaySession !== 'undefined' && ApplePaySession.canMakePayments();
 }
 
 export const useMobileMethods: UseMobileMethodsReturn = (): UseMobilePaymentMethods => {
   // eslint-disable-next-line unicorn/consistent-function-scoping
   const setMobilePayments: any = async () => {
     const { applePayEligible, googlePayEligible } = await checkMobilePayments();
-    const { data, error } = await useAsyncData(() => {
+    const { data, error } = await useAsyncData('', () => {
       const mobilePayments: string[] = [];
 
       if (applePayEligible) {
@@ -87,10 +88,11 @@ export const useMobileMethods: UseMobileMethodsReturn = (): UseMobilePaymentMeth
         mobilePayments.push('PAYPAL_GOOGLE_PAY');
       }
       if (mobilePayments && mobilePayments.length > 0) {
-        useSdk().plentysystems.setMobilePaymentProviderList({
+        return useSdk().plentysystems.setMobilePaymentProviderList({
           mobilePayments: mobilePayments,
         });
       }
+      return mobilePayments as any;
     });
   };
 
