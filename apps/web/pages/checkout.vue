@@ -155,6 +155,7 @@ onNuxtReady(async () => {
 await getCart().then(
   async () =>
     await Promise.all([
+      useMobileMethods().setMobilePayments(),
       useCartShippingMethods().getShippingMethods(),
       usePaymentMethods().fetchPaymentMethods(),
       useActiveShippingCountries().getActiveShippingCountries(),
