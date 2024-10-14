@@ -81,7 +81,7 @@
             <PayPalApplePayButton
               v-if="applePayAvailable"
               :style="createOrderLoading || disableShippingPayment || cartLoading ? 'pointer-events: none;' : ''"
-              @button-clicked="validateTerms
+              @button-clicked="validateTerms"
             />
             <PayPalGooglePayButton
               :style="createOrderLoading || disableShippingPayment || cartLoading ? 'pointer-events: none;' : ''"
