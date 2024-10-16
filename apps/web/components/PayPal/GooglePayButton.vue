@@ -1,9 +1,4 @@
 <template>
-  <div class="flex items-center justify-center w-full my-2" v-if="isGooglePayLoaded">
-    <div class="border-t-2 flex-grow"></div>
-    <p class="px-2 text-sm uppercase text-gray-400">{{ $t('or') }}</p>
-    <div class="border-t-2 flex-grow"></div>
-  </div>
   <div id="google-pay-button"></div>
 </template>
 
@@ -11,7 +6,6 @@
 import { GooglePayPayerActionData, PayPalAddToCartCallback } from '~/components/PayPal/types';
 import { cartGetters, orderGetters } from '@plentymarkets/shop-api';
 
-let isGooglePayLoaded = true;
 let countryCodeString = '';
 const { getScript, executeOrder, createTransaction, captureOrder } = usePayPal();
 const { shippingPrivacyAgreement } = useAdditionalInformation();
@@ -122,7 +116,6 @@ async function onGooglePayLoaded() {
   const { allowedPaymentMethods, apiVersion, apiVersionMinor } = await getGooglePayConfig();
   try {
     const response = await paymentsClient.isReadyToPay({ allowedPaymentMethods, apiVersion, apiVersionMinor });
-    isGooglePayLoaded = response.result;
     if (response.result) {
       addGooglePayButton();
     }

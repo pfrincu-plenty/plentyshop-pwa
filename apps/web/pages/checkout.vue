@@ -66,6 +66,16 @@
             >
               {{ $t('buy') }}
             </UiButton>
+            <PayPalApplePayButton
+              v-if="selectedPaymentId === paypalApplePayPaymentId"
+              :style="createOrderLoading || disableShippingPayment || cartLoading ? 'pointer-events: none;' : ''"
+              @button-clicked="validateTerms"
+            />
+            <PayPalGooglePayButton
+              v-if="selectedPaymentId === paypalGooglePayPaymentId"
+              :style="createOrderLoading || disableShippingPayment || cartLoading ? 'pointer-events: none;' : ''"
+              @button-clicked="validateTerms"
+            />
             <UiButton
               v-else
               type="submit"
@@ -78,14 +88,6 @@
               <SfLoaderCircular v-if="createOrderLoading" class="flex justify-center items-center" size="sm" />
               <template v-else>{{ $t('buy') }}</template>
             </UiButton>
-            <PayPalApplePayButton
-              :style="createOrderLoading || disableShippingPayment || cartLoading ? 'pointer-events: none;' : ''"
-              @button-clicked="validateTerms"
-            />
-            <PayPalGooglePayButton
-              :style="createOrderLoading || disableShippingPayment || cartLoading ? 'pointer-events: none;' : ''"
-              @button-clicked="validateTerms"
-            />
           </OrderSummary>
         </div>
       </div>
@@ -106,7 +108,12 @@
 import { SfLoaderCircular } from '@storefront-ui/vue';
 import _ from 'lodash';
 import PayPalExpressButton from '~/components/PayPal/PayPalExpressButton.vue';
-import { PayPalCreditCardPaymentKey, PayPalPaymentKey } from '~/composables/usePayPal/types';
+import {
+  PayPalApplePayKey,
+  PayPalCreditCardPaymentKey,
+  PayPalGooglePayKey,
+  PayPalPaymentKey,
+} from '~/composables/usePayPal/types';
 import { AddressType, paymentProviderGetters, cartGetters } from '@plentymarkets/shop-api';
 import { PayPalAddToCartCallback } from '~/components/PayPal/types';
 
@@ -144,6 +151,7 @@ const {
 } = useCheckoutPagePaymentAndShipping();
 
 onNuxtReady(async () => {
+  await useMobileMethods().setMobilePayments();
   useFetchAdddress(AddressType.Shipping)
     .fetchServer()
     .then(() => persistShippingAddress())
@@ -158,7 +166,6 @@ onNuxtReady(async () => {
 await getCart().then(
   async () =>
     await Promise.all([
-      useMobileMethods().setMobilePayments(),
       useCartShippingMethods().getShippingMethods(),
       usePaymentMethods().fetchPaymentMethods(),
       useActiveShippingCountries().getActiveShippingCountries(),
@@ -178,7 +185,15 @@ const paypalCreditCardPaymentId = computed(() => {
   return paymentProviderGetters.getIdByPaymentKey(paymentMethods.value.list, PayPalCreditCardPaymentKey);
 });
 
-// const applePayAvailable = computed(() => import.meta.client && (window as any).ApplePaySession);
+const paypalGooglePayPaymentId = computed(() => {
+  if (!paymentMethods.value.list) return null;
+  return paymentProviderGetters.getIdByPaymentKey(paymentMethods.value.list, PayPalGooglePayKey);
+});
+
+const paypalApplePayPaymentId = computed(() => {
+  if (!paymentMethods.value.list) return null;
+  return paymentProviderGetters.getIdByPaymentKey(paymentMethods.value.list, PayPalApplePayKey);
+});
 
 const readyToBuy = () => {
   if (anyAddressFormIsOpen.value) return backToFormEditing();

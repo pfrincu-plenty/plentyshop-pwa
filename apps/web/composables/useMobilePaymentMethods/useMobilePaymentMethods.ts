@@ -16,22 +16,35 @@ const checkMobilePayments = async (): Promise<PaymentEligibility> => {
 // Dynamically load Google Pay SDK
 function loadGooglePayScript(): Promise<boolean> {
   return new Promise((resolve, reject) => {
-    if (document.querySelector('#google-pay-script')) {
-      // Script is already loaded
-      resolve(true);
-      return;
+    try {
+      const existingScript = document.querySelector('#google-pay-script');
+
+      if (existingScript) {
+        // If script is already loaded, resolve immediately
+        resolve(true);
+        return;
+      }
+
+      const script = document.createElement('script');
+      script.src = 'https://pay.google.com/gp/p/js/pay.js';
+      script.async = true;
+      script.id = 'google-pay-script';
+
+      // Event listener for successful script load
+      script.addEventListener('load', () => {
+        resolve(true);
+      });
+
+      // Event listener for script loading errors
+      script.addEventListener('error', () => {
+        console.error('Failed to load Google Pay script.');
+      });
+
+      // Append the script to the document head
+      document.head.append(script);
+    } catch {
+      // In case of any other unexpected error
     }
-
-    const script = document.createElement('script');
-    script.src = 'https://pay.google.com/gp/p/js/pay.js';
-    script.async = true;
-    script.id = 'google-pay-script';
-
-    script.addEventListener('load', () => {
-      resolve(true);
-    });
-
-    document.head.append(script);
   });
 }
 
