@@ -67,12 +67,12 @@
               {{ $t('buy') }}
             </UiButton>
             <PayPalApplePayButton
-              v-if="selectedPaymentId === paypalApplePayPaymentId"
+              v-else-if="selectedPaymentId === paypalApplePayPaymentId"
               :style="createOrderLoading || disableShippingPayment || cartLoading ? 'pointer-events: none;' : ''"
               @button-clicked="validateTerms"
             />
             <PayPalGooglePayButton
-              v-if="selectedPaymentId === paypalGooglePayPaymentId"
+              v-else-if="selectedPaymentId === paypalGooglePayPaymentId"
               :style="createOrderLoading || disableShippingPayment || cartLoading ? 'pointer-events: none;' : ''"
               @button-clicked="validateTerms"
             />
@@ -166,6 +166,7 @@ onNuxtReady(async () => {
 await getCart().then(
   async () =>
     await Promise.all([
+      useMobileMethods().setMobilePayments(),
       useCartShippingMethods().getShippingMethods(),
       usePaymentMethods().fetchPaymentMethods(),
       useActiveShippingCountries().getActiveShippingCountries(),
