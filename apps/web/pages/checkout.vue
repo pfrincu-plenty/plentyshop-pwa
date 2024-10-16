@@ -66,16 +66,6 @@
             >
               {{ $t('buy') }}
             </UiButton>
-            <PayPalApplePayButton
-              v-else-if="selectedPaymentId === paypalApplePayPaymentId"
-              :style="createOrderLoading || disableShippingPayment || cartLoading ? 'pointer-events: none;' : ''"
-              @button-clicked="validateTerms"
-            />
-            <PayPalGooglePayButton
-              v-else-if="selectedPaymentId === paypalGooglePayPaymentId"
-              :style="createOrderLoading || disableShippingPayment || cartLoading ? 'pointer-events: none;' : ''"
-              @button-clicked="validateTerms"
-            />
             <UiButton
               v-else
               type="submit"
@@ -88,6 +78,14 @@
               <SfLoaderCircular v-if="createOrderLoading" class="flex justify-center items-center" size="sm" />
               <template v-else>{{ $t('buy') }}</template>
             </UiButton>
+            <PayPalApplePayButton
+              :style="createOrderLoading || disableShippingPayment || cartLoading ? 'pointer-events: none;' : ''"
+              @button-clicked="validateTerms"
+            />
+            <PayPalGooglePayButton
+              :style="createOrderLoading || disableShippingPayment || cartLoading ? 'pointer-events: none;' : ''"
+              @button-clicked="validateTerms"
+            />
           </OrderSummary>
         </div>
       </div>
