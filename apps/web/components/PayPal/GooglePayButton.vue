@@ -176,17 +176,18 @@ async function processPayment(paymentData: google.payments.api.PaymentData) {
     const transaction = await createTransaction('googlepay');
     if (!transaction || !transaction.id) throw new Error('Transaction creation failed.');
 
+    const order = await createOrder({
+      paymentId: cart.value.methodOfPaymentId,
+      shippingPrivacyHintAccepted: shippingPrivacyAgreement.value,
+    });
+    if (!order || !order.order || !order.order.id) throw new Error('Order creation failed.');
+
     const { status } = await (paypal as any).Googlepay().confirmOrder({
-      orderId: transaction.id,
+      orderId: order.order.id,
       paymentMethodData: paymentData.paymentMethodData,
     });
 
     if (status === 'PAYER_ACTION_REQUIRED') {
-      const order = await createOrder({
-        paymentId: cart.value.methodOfPaymentId,
-        shippingPrivacyHintAccepted: shippingPrivacyAgreement.value,
-      });
-      if (!order || !order.order || !order.order.id) throw new Error('Order creation failed.');
       // eslint-disable-next-line promise/catch-or-return
       (paypal as any)
         .Googlepay()
