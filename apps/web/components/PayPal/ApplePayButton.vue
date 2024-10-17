@@ -47,6 +47,7 @@ const applePayPayment = async () => {
   const applePay = (paypal as any).Applepay() as ApplepayType;
   try {
     const paymentRequest = setPaymentRequest();
+    console.log('Payment Request:', paymentRequest);
     const paymentSession = new ApplePaySession(14, paymentRequest);
 
     paymentSession.onvalidatemerchant = async (event: ApplePayJS.ApplePayValidateMerchantEvent) => {
