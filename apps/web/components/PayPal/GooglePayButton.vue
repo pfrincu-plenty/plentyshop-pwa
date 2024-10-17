@@ -176,14 +176,8 @@ async function processPayment(paymentData: google.payments.api.PaymentData) {
     const transaction = await createTransaction('googlepay');
     if (!transaction || !transaction.id) throw new Error('Transaction creation failed.');
 
-    const order = await createOrder({
-      paymentId: cart.value.methodOfPaymentId,
-      shippingPrivacyHintAccepted: shippingPrivacyAgreement.value,
-    });
-    if (!order || !order.order || !order.order.id) throw new Error('Order creation failed.');
-
     const { status } = await (paypal as any).Googlepay().confirmOrder({
-      orderId: order.order.id,
+      orderId: transaction.id,
       paymentMethodData: paymentData.paymentMethodData,
     });
 
@@ -191,21 +185,25 @@ async function processPayment(paymentData: google.payments.api.PaymentData) {
       // eslint-disable-next-line promise/catch-or-return
       (paypal as any)
         .Googlepay()
-        .initiatePayerAction({ orderId: order.order.id })
+        .initiatePayerAction({ orderId: transaction.id })
         // eslint-disable-next-line promise/always-return
         .then(async (data: GooglePayPayerActionData) => {
           await captureOrder({
             paypalOrderId: data.paypalOrderId,
             paypalPayerId: data.paypalPayerId,
           });
+          const order = await createOrder({
+            paymentId: cart.value.methodOfPaymentId,
+            shippingPrivacyHintAccepted: shippingPrivacyAgreement.value,
+          });
           await executeOrder({
             mode: 'googlepay',
             plentyOrderId: Number.parseInt(orderGetters.getId(order)),
             paypalTransactionId: data.orderID,
           });
+          clearCartItems();
+          navigateTo(localePath(paths.confirmation + '/' + order.order.id + '/' + order.order.accessKey));
         });
-      clearCartItems();
-      navigateTo(localePath(paths.confirmation + '/' + order.order.id + '/' + order.order.accessKey));
     } else {
       const order = await createOrder({
         paymentId: cart.value.methodOfPaymentId,
