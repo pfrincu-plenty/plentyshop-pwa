@@ -7,7 +7,7 @@ import { GooglePayPayerActionData, PayPalAddToCartCallback } from '~/components/
 import { cartGetters, orderGetters } from '@plentymarkets/shop-api';
 
 let countryCodeString = '';
-const { getScript, executeOrder, createCreditCardTransaction, captureOrder } = usePayPal();
+const { getScript, executeOrder, createTransaction, captureOrder } = usePayPal();
 const { shippingPrivacyAgreement } = useAdditionalInformation();
 const { createOrder } = useMakeOrder();
 const { data: cart, clearCartItems } = useCart();
@@ -50,10 +50,18 @@ async function getGooglePaymentDataRequest() {
     callbackIntents,
   } = await getGooglePayConfig();
   countryCodeString = countryCode;
+  const modifiedAllowedPaymentMethods = allowedPaymentMethods.map((method: any) => ({
+    ...method,
+    transactionInfo: {
+      ...method.transactionInfo,
+      intent: 'AUTHORIZE',
+    },
+  }));
+
   const baseRequest = {
     apiVersion,
     apiVersionMinor,
-    allowedPaymentMethods,
+    allowedPaymentMethods: modifiedAllowedPaymentMethods,
     transactionInfo,
     merchantInfo,
     callbackIntents,
@@ -173,7 +181,7 @@ async function onGooglePaymentButtonClicked() {
 
 async function processPayment(paymentData: google.payments.api.PaymentData) {
   try {
-    const transaction = await createCreditCardTransaction();
+    const transaction = await createTransaction('googlepay');
     if (!transaction || !transaction.id) throw new Error('Transaction creation failed.');
 
     const { status } = await (paypal as any).Googlepay().confirmOrder({
