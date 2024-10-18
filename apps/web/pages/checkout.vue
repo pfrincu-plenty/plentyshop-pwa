@@ -163,15 +163,16 @@ onNuxtReady(async () => {
     .catch((error) => useHandleError(error));
 });
 
-await getCart().then(
-  async () =>
-    await Promise.all([
-      useMobileMethods().setMobilePayments(),
-      useCartShippingMethods().getShippingMethods(),
-      usePaymentMethods().fetchPaymentMethods(),
-      useActiveShippingCountries().getActiveShippingCountries(),
-    ]),
-);
+await getCart()
+  .then(async () => await useMobileMethods().setMobilePayments())
+  .then(
+    async () =>
+      await Promise.all([
+        useCartShippingMethods().getShippingMethods(),
+        usePaymentMethods().fetchPaymentMethods(),
+        useActiveShippingCountries().getActiveShippingCountries(),
+      ]),
+  );
 
 const paypalCardDialog = ref(false);
 const disableShippingPayment = computed(() => loadShipping.value || loadPayment.value);

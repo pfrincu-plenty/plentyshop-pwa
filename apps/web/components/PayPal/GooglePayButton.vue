@@ -35,6 +35,7 @@ let paymentsClient: google.payments.api.PaymentsClient | null = null,
 async function getGooglePayConfig() {
   if (googlepayConfig === null) {
     googlepayConfig = await (paypal as any).Googlepay().config();
+    console.log(googlepayConfig);
   }
   return googlepayConfig;
 }
