@@ -2,9 +2,14 @@
 
 ## v1.x.x (yyyy-mm-dd)
 
+- Added new carousel compoment via Swipper library
+- Created new useCarousel composable holding Carousel logic
+- Minified and purged swiper css files for speed optimization
+
 ### New
 
 - Added a new request header for configId and added no cache to environment variables.
+- Implement new notification design
 
 ### 🩹 Fixed
 
@@ -12,6 +17,7 @@
 - Automatically generate a language file for every active language, not just the default language.
 - Soft login was still shown after successfully authenticating on the order confirmation page.
 - Fixed an issue where manufacturer data was introducing 'name' into structured data instead of 'externalName'.
+- Headlines now use the configured font.
 
 ### 👷 Changed
 
